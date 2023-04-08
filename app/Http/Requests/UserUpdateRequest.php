@@ -38,7 +38,11 @@ class UserUpdateRequest extends FormRequest
             'pos_code' => 'nullable',
             'phone_number' => 'nullable',
             'father' => 'required',
-            'mother' => 'required'
+            'mother' => 'required',
+            'branch_ids' => 'required|array',
+            'branch_ids.*' => 'required|distinct|exists:branches,id,deleted_at,NULL',
+            'main_branch_id' => 'required|exists:branches,id,deleted_at,NULL',
+            'join_date' => 'required|date_format:Y-m-d|before_or_equal:today',
         ];
     }
 }

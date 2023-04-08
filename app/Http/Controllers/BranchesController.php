@@ -10,6 +10,8 @@ use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\BranchCreateRequest;
 use App\Http\Requests\BranchUpdateRequest;
 use App\Http\Resources\BranchCollection;
+use App\Http\Resources\BranchResource;
+use App\Http\Resources\BranchSelect;
 use App\Repositories\BranchRepository;
 use App\Validators\BranchValidator;
 use Illuminate\Support\Facades\DB;
@@ -26,17 +28,23 @@ class BranchesController extends Controller
 
     public function index(Request $request)
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        $this->repository->with('Shepherd')->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         return new BranchCollection($this->repository->paginate($request->per_page));
+    }
+
+    public function select(Request $request)
+    {
+        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        return BranchSelect::collection($this->repository->paginate($request->per_page));
     }
 
     public function store(BranchCreateRequest $request)
     {
         try {
             DB::beginTransaction();
-            Log::info($request);
+            $branch = $this->repository->create($request->only($this->repository->getFillable()));
             DB::commit();
-
+            return ($this->show($branch->id))->additional(['success' => true]);
         } catch (ValidatorException $e) {
             DB::rollBack();
             return response()->json([
@@ -48,70 +56,23 @@ class BranchesController extends Controller
 
     public function show($id)
     {
-        $branch = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $branch,
-            ]);
-        }
-
-        return view('branches.show', compact('branch'));
+        $branch = $this->repository->with('Shepherd')->find($id);
+        return new BranchResource($branch);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $branch = $this->repository->find($id);
-
-        return view('branches.edit', compact('branch'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  BranchUpdateRequest $request
-     * @param  string            $id
-     *
-     * @return Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
-     */
     public function update(BranchUpdateRequest $request, $id)
     {
         try {
-
-            $branch = $this->repository->update($request->all(), $id);
-
-            $response = [
-                'message' => 'Branch updated.',
-                'data'    => $branch->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
+            DB::beginTransaction();
+            $branch = $this->repository->update($request->only($this->repository->getFillable()), $id);
+            DB::commit();
+            return ($this->show($branch->id))->additional(['success' => true]);
         } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            DB::rollBack();
+            return response()->json([
+                'success'   => false,
+                'message' => $e->getMessageBag()
+            ]);
         }
     }
 
@@ -125,16 +86,20 @@ class BranchesController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
+        try {
+            DB::beginTransaction();
+            $branch = $this->repository->delete($id);
+            DB::commit();
 
             return response()->json([
-                'message' => 'Branch deleted.',
-                'deleted' => $deleted,
+                'success' => $branch
+            ]);
+        } catch (ValidatorException $e) {
+            DB::rollback();
+            return response()->json([
+                'success'   => false,
+                'message' => $e->getMessageBag()
             ]);
         }
-
-        return redirect()->back()->with('message', 'Branch deleted.');
     }
 }

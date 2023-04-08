@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Log;
 
-class AuthUserResource extends JsonResource
+class BranchResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,8 +18,13 @@ class AuthUserResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'nik' => $this->nik,
-            'permissions' => $this->permissions
+            'code' => $this->code,
+            'address' => $this->address,
+            'telephone'=> $this->telephone,
+            'user' => new UserSelect($this->whenLoaded('Shepherd')),
+            'need_approval' => $this->need_approval,
+            'can_approve' => $this->can_approve,
+            'can_update' => $this->can_update
         ];
     }
 }

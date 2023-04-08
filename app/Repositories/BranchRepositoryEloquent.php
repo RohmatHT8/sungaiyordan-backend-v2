@@ -7,6 +7,7 @@ use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\BranchRepository;
 use App\Entities\Branch;
 use App\Validators\BranchValidator;
+use Prettus\Repository\Traits\CacheableRepository;
 
 /**
  * Class BranchRepositoryEloquent.
@@ -20,6 +21,12 @@ class BranchRepositoryEloquent extends BaseRepository implements BranchRepositor
      *
      * @return string
      */
+    use CacheableRepository;
+    protected $fieldSearchable = [
+        'code' => 'like',
+        'name' => 'like',
+        'shepherd.name' => 'like',
+    ];
     public function model()
     {
         return Branch::class;

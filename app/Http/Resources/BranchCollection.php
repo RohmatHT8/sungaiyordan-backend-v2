@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Log;
 
 class BranchCollection extends ResourceCollection
 {
@@ -21,6 +22,7 @@ class BranchCollection extends ResourceCollection
                     'name' => $model->name,
                     'code' => $model->code,
                     'address' => $model->address,
+                    'shepherd_name' => $model->shepherd->name,
                     'telephone'=> $model->telephone,
                     'need_approval' => $model->need_approval,
                     'approved_by' => $model->approved_by,

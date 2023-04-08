@@ -14,13 +14,13 @@ use App\Http\Requests\UserPasswordUpdateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\UserSelect;
 use App\Repositories\UserBranchRepository;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class UsersController extends Controller
@@ -40,12 +40,20 @@ class UsersController extends Controller
         return new UserCollection($this->repository->paginate($request->per_page));
     }
 
+    public function select(Request $request)
+    {
+        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+
+        return UserSelect::collection($this->repository->paginate($request->per_page));
+    }
+
     public function store(UserCreateRequest $request)
     {
         try {
             DB::beginTransaction();
-            $defaultPassword = Str::random(8);
-            $request->merge(['password' => bcrypt($defaultPassword)]);
+            $strPassword = explode('-',$request->date_of_birth);
+            $password = $strPassword[2].$strPassword[1].$strPassword[0];
+            $request->merge(['password' => bcrypt($password)]);
             $user = $this->repository->create($request->only($this->repository->getFillable()));
 
             foreach($request->branch_ids as $branch){
@@ -57,7 +65,7 @@ class UsersController extends Controller
 
             DB::commit();
 
-            return $defaultPassword;
+            return ($this->show($user->id))->additional(['success' => true, 'password' => $password]);
         } catch (ValidatorException $e) {
             DB::rollBack();
             return response()->json([
@@ -69,7 +77,7 @@ class UsersController extends Controller
 
     public function show($id)
     {
-        $user = $this->repository->with(['roles', 'branches'])
+        $user = $this->repository->with(['roles', 'branches', 'mainBranch'])
             ->scopeQuery(function ($query) {
                 return $query->withTrashed();
             })->find($id);
