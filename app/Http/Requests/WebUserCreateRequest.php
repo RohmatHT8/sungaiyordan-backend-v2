@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\NotDuplicateHOFAndWife;
+use App\Rules\UniqueIf;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\RequiredIf;
 
 class WebUserCreateRequest extends FormRequest
 {
@@ -27,20 +30,21 @@ class WebUserCreateRequest extends FormRequest
             'users.*.father' => 'required',
             'users.*.mother' => 'required',
             'users.*.phone_number' => 'nullable',
-            'users.*.nik' => 'required|unique:web_users,nik',
+            'users.*.nik' => 'required',
             'users.*.place_of_birth' => 'required',
             'users.*.date_of_birth' => 'required|date_format:Y-m-d|before:today',
             'users.*.join_date' => 'nullable|date_format:Y-m-d|before_or_equal:today',
             'users.*.gender' => 'required',
             'users.*.congregational_status' => 'required',
-            'users.*.status_baptize' => 'required',
+            'users.*.status_baptize' => 'required_if:users.*.congregational_status,==,Berjemaat',
             'users.*.date_of_baptize' => 'nullable|date_format:Y-m-d|before_or_equal:today',
-            'users.*.status_shdr' => 'required',
+            'users.*.status_shdr' => 'required_if:users.*.congregational_status,==,Berjemaat',
             'users.*.date_shdr' => 'nullable|date_format:Y-m-d|before_or_equal:today',
             'users.*.profession' => 'required',
-            'users.*.email' => 'nullable|unique:web_users,email',
+            'users.*.email' => 'nullable',
             'users.*.marital_status' => 'required',
-            'users.*.wedding_date' => 'nullable|date_format:Y-m-d|before_or_equal:today'
+            'users.*.wedding_date' => 'nullable|date_format:Y-m-d|before_or_equal:today',
+            'users.*.family_member_status' => ['required', new NotDuplicateHOFAndWife(collect($this->users)->pluck('family_member_status'))]
         ];
     }
 }

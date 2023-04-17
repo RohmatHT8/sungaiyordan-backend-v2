@@ -64,6 +64,7 @@ class WebUsersController extends Controller
                 $date = explode('-',$user['date_of_birth']);
                 $email = !$user['email'] ? explode(' ',$user['name'])[0].$date[2].$date[1].$date[0].'@gbisy.com' : $user['email'];
                 $this->repository->create([
+                    'family_member_status' => $user['family_member_status'],
                     'web_user_family_card_id' => $familyCard->id,
                     'name' => $user['name'],
                     'father' => $user['father'],
