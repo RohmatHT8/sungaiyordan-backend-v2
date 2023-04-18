@@ -41,6 +41,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\AccessLogRepository::class, \App\Repositories\AccessLogRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\WebFamilyCardRepository::class, \App\Repositories\WebFamilyCardRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\WebUserRepository::class, \App\Repositories\WebUserRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\FamilyCardWebRepository::class, \App\Repositories\FamilyCardWebRepositoryEloquent::class);
         //:end-bindings:
     }
 }

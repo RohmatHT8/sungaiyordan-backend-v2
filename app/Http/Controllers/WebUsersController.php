@@ -9,6 +9,7 @@ use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\WebUserCreateRequest;
 use App\Http\Requests\WebUserUpdateRequest;
+use App\Http\Resources\webUserCollection;
 use App\Repositories\WebFamilyCardRepository;
 use App\Repositories\WebUserRepository;
 use App\Validators\WebUserValidator;
@@ -40,19 +41,10 @@ class WebUsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $webUsers = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $webUsers,
-            ]);
-        }
-
-        return view('webUsers.index', compact('webUsers'));
+        return new webUserCollection($this->repository->paginate($request->per_page));
     }
 
     public function store(WebUserCreateRequest $request)

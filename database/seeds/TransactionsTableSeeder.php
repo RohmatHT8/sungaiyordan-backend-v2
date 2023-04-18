@@ -26,6 +26,10 @@ class TransactionsTableSeeder extends Seeder
                 'name' => 'Department',
                 'subject' => 'App\Entities\Department'
             ],
+            [
+                'name' => 'WebUser',
+                'subject' => 'App\Entities\WebUser'
+            ],
         ];
 
         foreach ($transactions as $key => $value) {

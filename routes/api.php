@@ -55,6 +55,8 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::post('branch', 'BranchesController@store')->middleware(['auth:api', 'can:branch-create']);
     Route::put('branch/{id}', 'BranchesController@update')->middleware(['auth:api', 'can:branch-update']);
     Route::delete('branch/{id}','BranchesController@destroy')->middleware(['auth:api', 'can:branch-delete']);
+
+    Route::get('webuser', 'WebUsersController@index')->middleware('auth:api', 'can:webuser-index');
 });
 
 Route::get('select/branchWeb', 'BranchesController@select');
