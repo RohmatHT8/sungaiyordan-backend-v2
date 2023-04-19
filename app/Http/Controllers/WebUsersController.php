@@ -72,7 +72,7 @@ class WebUsersController extends Controller
                     'status_baptize' => $user['status_baptize'],
                     'date_of_baptize' => $user['date_of_baptize'],
                     'place_of_baptize' => $user['place_of_baptize'],
-                    'who_baptizes' => $user['who_baptizes'],
+                    'who_baptize' => $user['who_baptizes'],
                     'status_shdr' => $user['status_shdr'],
                     'date_shdr' => $user['date_shdr'],
                     'place_of_shdr' => $user['place_of_shdr'],
