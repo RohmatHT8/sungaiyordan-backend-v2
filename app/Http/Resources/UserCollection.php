@@ -22,7 +22,7 @@ class UserCollection extends ResourceCollection
                     'nik' => $model->nik,
                     'name' => $model->name,
                     'phone_number' => $model->phone_number,
-                    'branch' => $model->mainBranch->name,
+                    'branch' => !empty($model->mainBranch) ? $model->mainBranch->name:'',
                     'need_approval' => $model->need_approval,
                     'can_approve' => $model->can_approve,
                     'can_set_quit' => $model->can_set_quit,

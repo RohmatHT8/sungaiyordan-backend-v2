@@ -56,7 +56,7 @@ trait TransactionLogControllerTrait
             'permission_id' => $permission->id,
             'subject_id' => $id,
             'causer_id' => $causerId,
-            'previous_log_id' => $this->getLastActiveLog($permission,$id)->id,
+            'previous_log_id' => !empty($this->getLastActiveLog($permission,$id)) ? $this->getLastActiveLog($permission,$id)->id : NULL,
             'new_properties' => json_encode($originalRequest->toArray()),
             'method' => empty($method) ? 'default' : $method,
             'is_active' => 1,
