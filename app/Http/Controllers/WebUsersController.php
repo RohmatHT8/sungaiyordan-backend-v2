@@ -43,7 +43,7 @@ class WebUsersController extends Controller
      */
     public function index(Request $request)
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        $this->repository->with('webUserFamilyCard', 'webUserFamilyCard.branch')->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         return new webUserCollection($this->repository->paginate($request->per_page));
     }
 

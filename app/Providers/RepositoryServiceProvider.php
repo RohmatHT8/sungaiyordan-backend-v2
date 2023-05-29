@@ -42,6 +42,18 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\WebFamilyCardRepository::class, \App\Repositories\WebFamilyCardRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\WebUserRepository::class, \App\Repositories\WebUserRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\FamilyCardWebRepository::class, \App\Repositories\FamilyCardWebRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\PermissionsRepository::class, \App\Repositories\PermissionsRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ShdrRepository::class, \App\Repositories\ShdrRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\NumberSettingRepository::class, \App\Repositories\NumberSettingRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\NumberSettingComponentRepository::class, \App\Repositories\NumberSettingComponentRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\BaptismRepository::class, \App\Repositories\BaptismRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ChildSubmissionRepository::class, \App\Repositories\ChildSubmissionRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\MarriageCertificateRepository::class, \App\Repositories\MarriageCertificateRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ConfirmationOfMarriageRepository::class, \App\Repositories\ConfirmationOfMarriageRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\FamilyCardRepository::class, \App\Repositories\FamilyCardRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\FamilyCardComponentRepository::class, \App\Repositories\FamilyCardComponentRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\CongregationalStatusRepository::class, \App\Repositories\CongregationalStatusRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\CongregationalStatusComponentRepository::class, \App\Repositories\CongregationalStatusComponentRepositoryEloquent::class);
         //:end-bindings:
     }
 }

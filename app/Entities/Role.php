@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use App\Util\RelationshipsTrait;
+use App\Util\TransactionLogModelTrait;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
@@ -14,13 +15,13 @@ use Prettus\Repository\Traits\TransformableTrait;
  */
 class Role extends Model implements Transformable
 {
-    use TransformableTrait, RelationshipsTrait;
+    use TransformableTrait, RelationshipsTrait, TransactionLogModelTrait;
 
     protected $fillable = ['code','name','department_id','boss_id','need_approval'];
     protected $dates = ['deleted_at'];
 
     public function department(){
-        return $this->belongsTo('App\Entities\Department')->withTrashed();
+        return $this->belongsTo('App\Entities\Department');
     }
 
     public function userRoles(){
@@ -28,7 +29,7 @@ class Role extends Model implements Transformable
     }
 
     public function boss(){
-        return $this->belongsTo('App\Entities\Role','boss_id')->withTrashed();
+        return $this->belongsTo('App\Entities\Role','boss_id');
     }
 
     public function permissionMappings(){

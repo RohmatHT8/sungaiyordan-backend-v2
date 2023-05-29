@@ -13,18 +13,18 @@ class RoleUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
-        return [
-            //
+        $rules = [
+            'name' => 'required',
+            'code' => ['required','unique:roles,code,'.$this->id.',id,deleted_at,NULL'],
+            'boss_id' => 'nullable|exists:roles,id,deleted_at,NULL,need_approval,0',
+            'department_id' => ['required','exists:departments,id,deleted_at,NULL,need_approval,0']
         ];
+
+        return $rules;
     }
 }

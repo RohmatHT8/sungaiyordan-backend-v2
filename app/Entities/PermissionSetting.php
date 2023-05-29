@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use App\Util\TransactionLogModelTrait;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
@@ -13,7 +14,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  */
 class PermissionSetting extends Model implements Transformable
 {
-    use TransformableTrait;
+    use TransformableTrait, TransactionLogModelTrait;
 
     protected $fillable = ['need_approval'];
 
@@ -24,11 +25,11 @@ class PermissionSetting extends Model implements Transformable
     }
 
     public function roles(){
-        return $this->belongsToMany('App\Entities\Role','permission_mappings','permission_setting_id','role_id')->withTrashed();
+        return $this->belongsToMany('App\Entities\Role','permission_mappings','permission_setting_id','role_id');
     }
 
     public function branches(){
-        return $this->belongsToMany('App\Entities\Branch','permission_mappings','permission_setting_id','branch_id')->withTrashed();
+        return $this->belongsToMany('App\Entities\Branch','permission_mappings','permission_setting_id','branch_id');
     }
 
 }

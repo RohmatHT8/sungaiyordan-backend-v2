@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use App\Util\RelationshipsTrait;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
@@ -13,7 +14,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  */
 class WebFamilyCard extends Model implements Transformable
 {
-    use TransformableTrait;
+    use TransformableTrait, RelationshipsTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +25,10 @@ class WebFamilyCard extends Model implements Transformable
 
     public function branch(){
         return $this->belongsTo('App\Entities\Branch', 'branch_id');
+    }
+
+    public function webUsers(){
+        return $this->hasMany('App\Entities\WebUser', 'web_user_family_card_id');
     }
 
 }

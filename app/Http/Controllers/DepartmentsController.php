@@ -9,8 +9,13 @@ use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\DepartmentCreateRequest;
 use App\Http\Requests\DepartmentUpdateRequest;
+use App\Http\Resources\DepartmentCollection;
+use App\Http\Resources\DepartmentResource;
+use App\Http\Resources\DepartmentSelect;
 use App\Repositories\DepartmentRepository;
-use App\Validators\DepartmentValidator;
+use App\Util\TransactionLogControllerTrait;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class DepartmentsController.
@@ -19,186 +24,81 @@ use App\Validators\DepartmentValidator;
  */
 class DepartmentsController extends Controller
 {
-    /**
-     * @var DepartmentRepository
-     */
+
+    use TransactionLogControllerTrait;
+
     protected $repository;
 
-    /**
-     * @var DepartmentValidator
-     */
-    protected $validator;
-
-    /**
-     * DepartmentsController constructor.
-     *
-     * @param DepartmentRepository $repository
-     * @param DepartmentValidator $validator
-     */
-    public function __construct(DepartmentRepository $repository, DepartmentValidator $validator)
+    public function __construct(DepartmentRepository $repository)
     {
         $this->repository = $repository;
-        $this->validator  = $validator;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
+        $this->repository->pushCriteria(app('App\Criteria\OrderCriteria'));
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $departments = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $departments,
-            ]);
-        }
-
-        return view('departments.index', compact('departments'));
+        return new DepartmentCollection($this->repository->paginate($request->per_page));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  DepartmentCreateRequest $request
-     *
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
-     */
-    public function store(DepartmentCreateRequest $request)
+    public function store(DepartmentCreateRequest $request){
+        try {
+            DB::beginTransaction();
+            $department = $this->logStore($request,$this->repository);
+            DB::commit();
+
+            return ($this->show($department->id))->additional(['success' => true]);
+        } catch (ValidatorException $e) {
+            DB::rollback();
+            return response()->json([
+                'success'   => false,
+                'message' => $e->getMessageBag()
+            ]);
+        }
+    }
+
+    public function show($id){
+        $department = $this->repository->find($id);
+        return new DepartmentResource($department);
+    }
+
+    public function select(Request $request){
+        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        return DepartmentSelect::collection($this->repository->paginate($request->per_page));
+    }
+
+    public function update(DepartmentUpdateRequest $request, $id){
+        try {
+            DB::beginTransaction();
+            $department = $this->logUpdate($request,$this->repository,$id);
+            DB::commit();
+
+            return ($this->show($department->id))->additional(['success' => true]);
+        } catch (ValidatorException $e) {
+            DB::rollback();
+            return response()->json([
+                'success'   => false,
+                'message' => $e->getMessageBag()
+            ]);
+        }
+    }
+
+    public function destroy(Request $request, $id)
     {
         try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $department = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'Department created.',
-                'data'    => $department->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $department = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
+            DB::beginTransaction();
+            $department = $this->logDestroy($request,$this->repository,$id);
+            DB::commit();
 
             return response()->json([
-                'data' => $department,
+                'success' => $department
             ]);
-        }
-
-        return view('departments.show', compact('department'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $department = $this->repository->find($id);
-
-        return view('departments.edit', compact('department'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  DepartmentUpdateRequest $request
-     * @param  string            $id
-     *
-     * @return Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
-     */
-    public function update(DepartmentUpdateRequest $request, $id)
-    {
-        try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
-            $department = $this->repository->update($request->all(), $id);
-
-            $response = [
-                'message' => 'Department updated.',
-                'data'    => $department->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
         } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
-    }
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
-
+            DB::rollback();
             return response()->json([
-                'message' => 'Department deleted.',
-                'deleted' => $deleted,
+                'success'   => false,
+                'message' => $e->getMessageBag()
             ]);
         }
-
-        return redirect()->back()->with('message', 'Department deleted.');
     }
 }

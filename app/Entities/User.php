@@ -18,7 +18,7 @@ class User extends Authenticatable implements Transformable
 {
     use TransformableTrait, Notifiable, HasApiTokens, SoftDeletes, RelationshipsTrait;
 
-    protected $fillable = ['name', 'email', 'password','nik','no_ktp','place_of_birth','date_of_birth','gender','ktp_address','address','phone_number','father','mother', 'main_branch', 'join_date'];
+    protected $fillable = ['name', 'email', 'password','nik','no_ktp','place_of_birth','date_of_birth','gender','ktp_address','address','phone_number','father','mother', 'main_branch_id', 'join_date','profession'];
 
     protected $dates = ['deleted_at'];
 
@@ -75,7 +75,7 @@ class User extends Authenticatable implements Transformable
     }
 
     public function role(){
-        return $this->belongsTo('App\Entities\Role')->withTrashed();
+        return $this->belongsTo('App\Entities\Role');
     }
 
     public function roles(){
@@ -86,18 +86,15 @@ class User extends Authenticatable implements Transformable
         return $this->orWhere('email', $identifier)->first();
     }
 
-    // public function getSubordinatesRoleId(){
-    //     $roles = [$this->role_id];
-    //     Log::info($roles);
-    //     $rolePointer = 0;
-    //     while($rolePointer<count($roles)){
-    //         $roles = array_unique (array_merge ($roles, Role::where('boss_id',$roles[$rolePointer])->pluck('id')->all()));
-    //         // Log::info($roles);
-    //         $rolePointer++;
-    //     }
-    //     // Log::info($rolePointer);
-    //     return $roles;
-    // }
+    public function getSubordinatesRoleId(){
+        $roles = [$this->role_id];
+        $rolePointer = 0;
+        while($rolePointer<count($roles)){
+            $roles = array_unique (array_merge ($roles, Role::where('boss_id',$roles[$rolePointer])->pluck('id')->all()));
+            $rolePointer++;
+        }
+        return $roles;
+    }
 
     public function getRoleIdAttribute()
     {
@@ -130,6 +127,10 @@ class User extends Authenticatable implements Transformable
         }
 
         return $permissions;
+    }
+
+    public function congregationStatuses() {
+        return $this->hasMany('App\Entities\CongregationalStatus');
     }
 
     public function mainBranch(){

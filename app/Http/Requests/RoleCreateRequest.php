@@ -13,7 +13,7 @@ class RoleCreateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,13 @@ class RoleCreateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
+        $rules = [
+            'name' => 'required',
+            'code' => ['required','unique:roles,code,NULL,id,deleted_at,NULL'],
+            'boss_id' => 'nullable|exists:roles,id,deleted_at,NULL,need_approval,0',
+            'department_id' => ['required','exists:departments,id,deleted_at,NULL,need_approval,0']
         ];
+
+        return $rules;
     }
 }

@@ -17,19 +17,52 @@ class TransactionsTableSeeder extends Seeder
             [
                 'name' => 'User',
                 'subject' => 'App\Entities\User'
-            ],
-            [
+            ],[
                 'name' => 'Branch',
                 'subject' => 'App\Entities\Branch'
-            ],
-            [
+            ],[
                 'name' => 'Department',
                 'subject' => 'App\Entities\Department'
-            ],
-            [
+            ],[
+                'name' => 'Role',
+                'subject' => 'App\Entities\Role'
+            ],[
                 'name' => 'WebUser',
                 'subject' => 'App\Entities\WebUser'
-            ],
+            ],[
+                'name' => 'WebFamilyCard',
+                'subject' => 'App\Entities\WebFamilyCard'
+            ],[
+                'name' => 'PermissionSetting',
+                'subject' => 'App\Entities\PermissionSetting'
+            ],[
+                'name' => 'Department',
+                'subject' => 'App\Entities\Department'
+            ],[
+                'name' => 'Shdr',
+                'subject' => 'App\Entities\Shdr'
+            ],[
+                'name' => 'NumberSetting',
+                'subject' => 'App\Entities\NumberSetting'
+            ],[
+                'name' => 'Baptism',
+                'subject' => 'App\Entities\Baptism'
+            ],[
+                'name' => 'ChildSubmission',
+                'subject' => 'App\Entities\ChildSubmission'
+            ],[
+                'name' => 'MarriageCertificate',
+                'subject' => 'App\Entities\MarriageCertificate'
+            ],[
+                'name' => 'ConfirmationOfMarriage',
+                'subject' => 'App\Entities\ConfirmationOfMarriage'
+            ],[
+                'name' => 'FamilyCard',
+                'subject' => 'App\Entities\FamilyCard'
+            ],[
+                'name' => 'CongregationalStatus',
+                'subject' => 'App\Entities\CongregationalStatus'
+            ]
         ];
 
         foreach ($transactions as $key => $value) {

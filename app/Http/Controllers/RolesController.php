@@ -9,8 +9,13 @@ use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\RoleCreateRequest;
 use App\Http\Requests\RoleUpdateRequest;
+use App\Http\Resources\RoleCollection;
+use App\Http\Resources\RoleResource;
+use App\Http\Resources\RoleSelect;
 use App\Repositories\RoleRepository;
-use App\Validators\RoleValidator;
+use App\Util\TransactionLogControllerTrait;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class RolesController.
@@ -19,26 +24,13 @@ use App\Validators\RoleValidator;
  */
 class RolesController extends Controller
 {
-    /**
-     * @var RoleRepository
-     */
+    use TransactionLogControllerTrait;
+
     protected $repository;
 
-    /**
-     * @var RoleValidator
-     */
-    protected $validator;
-
-    /**
-     * RolesController constructor.
-     *
-     * @param RoleRepository $repository
-     * @param RoleValidator $validator
-     */
-    public function __construct(RoleRepository $repository, RoleValidator $validator)
+    public function __construct(RoleRepository $repository)
     {
         $this->repository = $repository;
-        $this->validator  = $validator;
     }
 
     /**
@@ -46,159 +38,75 @@ class RolesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
+    {
+        $this->repository->pushCriteria(app('App\Criteria\OrderCriteria'));
+        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        return new RoleCollection($this->repository->paginate($request->per_page));
+    }
+
+    public function select(Request $request)
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $roles = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $roles,
-            ]);
-        }
-
-        return view('roles.index', compact('roles'));
+        return RoleSelect::collection($this->repository->paginate($request->per_page));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  RoleCreateRequest $request
-     *
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
-     */
-    public function store(RoleCreateRequest $request)
-    {
+    public function store(RoleCreateRequest $request){
         try {
+            DB::beginTransaction();
+            $role = $this->logStore($request,$this->repository);
+            DB::commit();
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $role = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'Role created.',
-                'data'    => $role->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
+            return ($this->show($role->id))->additional(['success' => true]);
         } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $role = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
+            DB::rollback();
             return response()->json([
-                'data' => $role,
+                'success'   => false,
+                'message' => $e->getMessageBag()
             ]);
         }
-
-        return view('roles.show', compact('role'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $role = $this->repository->find($id);
+    public function show($id){
+        $role = $this->repository->with(['boss','department'])->scopeQuery(function($query){
+            return $query;
+        })->find($id);
 
-        return view('roles.edit', compact('role'));
+        return new RoleResource($role);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  RoleUpdateRequest $request
-     * @param  string            $id
-     *
-     * @return Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
-     */
-    public function update(RoleUpdateRequest $request, $id)
-    {
+    public function update(RoleUpdateRequest $request, $id){
         try {
+            DB::beginTransaction();
+            $role = $this->logUpdate($request,$this->repository,$id);
+            DB::commit();
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
-            $role = $this->repository->update($request->all(), $id);
-
-            $response = [
-                'message' => 'Role updated.',
-                'data'    => $role->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
+            return ($this->show($role->id))->additional(['success' => true]);
         } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            DB::rollback();
+            return response()->json([
+                'success'   => false,
+                'message' => $e->getMessageBag()
+            ]);
         }
     }
 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
+    public function destroy(Request $request, $id){
+        try {
+            DB::beginTransaction();
+            $role = $this->logDestroy($request,$this->repository,$id);
+            DB::commit();
 
             return response()->json([
-                'message' => 'Role deleted.',
-                'deleted' => $deleted,
+                'success' => $role
+            ]);
+        } catch (ValidatorException $e) {
+            DB::rollback();
+            return response()->json([
+                'success'   => false,
+                'message' => $e->getMessageBag()
             ]);
         }
-
-        return redirect()->back()->with('message', 'Role deleted.');
     }
 }

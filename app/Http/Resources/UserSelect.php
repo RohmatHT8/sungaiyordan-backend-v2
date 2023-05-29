@@ -17,6 +17,7 @@ class UserSelect extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'nik' => $this->nik,
         ];
     }
 }

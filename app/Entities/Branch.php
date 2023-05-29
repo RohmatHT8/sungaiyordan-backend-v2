@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use App\Util\RelationshipsTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Prettus\Repository\Contracts\Transformable;
@@ -14,7 +15,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  */
 class Branch extends Model implements Transformable
 {
-    use TransformableTrait, SoftDeletes;
+    use TransformableTrait, SoftDeletes, RelationshipsTrait;
 
     /**
      * The attributes that are mass assignable.

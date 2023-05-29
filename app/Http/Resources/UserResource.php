@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Log;
 
 class UserResource extends JsonResource
 {
@@ -24,15 +25,20 @@ class UserResource extends JsonResource
             'gender' => $this->gender,
             'join_date' => $this->join_date,
             'ktp_address' => $this->ktp_address,
+            'address' => $this->address,
             'main_branch' => new BranchSelect($this->whenLoaded('mainBranch')),
             'no_ktp' => $this->no_ktp,
-            'phone_number' => $this->phone_number,
+            'phone_no' => $this->phone_number,
+            'profession' => $this->profession,
             'place_of_birth' => $this->place_of_birth,
-            'pos_code' => $this->pos_code,
             'branches' => BranchSelect::collection($this->whenLoaded('branches')),
             'need_approval' => $this->need_approval,
             'can_approve' => $this->can_approve,
-            'can_update' => $this->can_update
+            'can_update' => $this->can_update,
+            'roles' => $this->whenPivotLoaded('roles','user_roles', function() {
+                return UserRoleResource::collection($this->roles);
+            }),
+            'congregationalStatuses' => CongregationalSatatusResource::collection($this->whenLoaded('congregationStatuses'))
         ];
     }
 }
