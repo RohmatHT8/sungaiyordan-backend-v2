@@ -39,8 +39,15 @@ Route::group(['middleware' => ['capture-request']], function () {
 
     Route::get('select/usersertificate', 'UsersController@selectsertificate')->middleware([
         'auth:api',
-        'can:branch-index . 
-        | user-index',
+        'can:branch-index' . 
+        '| user-index' .
+        '| familycard-index' . 
+        '| shdr-index' . 
+        '| baptism-index' . 
+        '| childsubmission-index' .
+        '| marriagecertificate-index' . 
+        '| confirmationofmarriage-index',
+
     ]);
 
     Route::get('select/branch', 'BranchesController@select')->middleware([
