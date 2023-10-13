@@ -62,6 +62,7 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         $this->repository->pushCriteria(app('App\Criteria\OrderCriteria'));
+        $this->repository->pushCriteria(new BranchCriteria(null, 'App\Entities\User', 'users.id'));
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         return new UserCollection($this->repository->paginate($request->per_page));
     }
@@ -253,5 +254,9 @@ class UsersController extends Controller
             $no = $lassNo+1;
         }
         return $no;
+    }
+
+    public function barchart() {
+        return 'okk';
     }
 }

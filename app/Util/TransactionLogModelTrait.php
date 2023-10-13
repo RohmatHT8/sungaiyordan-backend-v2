@@ -44,12 +44,12 @@ trait TransactionLogModelTrait
         return (!empty(Auth::user()) && (Auth::user()->role_id==1 || Auth::user()->hasAuthority(strtolower($transaction->name).'-update')));
     }
 
-    public function getCanDeleteAttribute(){
+    public function defaultCanUpdateAttribute(){
         $transaction = Transaction::where('subject',__CLASS__)->first();
         return (!empty(Auth::user()) && (Auth::user()->role_id==1 || Auth::user()->hasAuthority(strtolower($transaction->name).'-delete')));
     }
 
-    public function getCanPrintAttribute(){
+    public function defaultCanPrintAttribute(){
         $transaction = Transaction::where('subject',__CLASS__)->first();
         return (!empty(Auth::user()) && !empty($transaction) && (Auth::user()->role_id==1 || Auth::user()->hasAuthority(strtolower($transaction->name).'-read')));
     }

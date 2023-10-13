@@ -32,4 +32,23 @@ class PermissionSetting extends Model implements Transformable
         return $this->belongsToMany('App\Entities\Branch','permission_mappings','permission_setting_id','branch_id');
     }
 
+    public function getCanApproveAttribute()
+    {
+        return true;
+    }
+
+    public function getCanDeleteAttribute()
+    {
+        return true;
+    }
+
+    public function getCanUpdateAttribute()
+    {
+        return true;
+    }
+
+    public function getCanPrintAttribute()
+    {
+        return true;
+    }
 }

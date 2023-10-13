@@ -4,6 +4,7 @@ namespace App\Entities;
 
 use App\Util\Helper;
 use App\Util\RelationshipsTrait;
+use App\Util\TransactionLogModelTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Prettus\Repository\Contracts\Transformable;
@@ -16,7 +17,7 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements Transformable
 {
-    use TransformableTrait, Notifiable, HasApiTokens, SoftDeletes, RelationshipsTrait;
+    use TransformableTrait, Notifiable, HasApiTokens, SoftDeletes, RelationshipsTrait, TransactionLogModelTrait;
 
     protected $fillable = ['name', 'email', 'password','nik','no_ktp','place_of_birth','date_of_birth','gender','ktp_address','address','phone_number','father','mother', 'main_branch_id', 'join_date','profession'];
 
@@ -24,7 +25,7 @@ class User extends Authenticatable implements Transformable
 
     protected $hidden = ['password', 'remember_token'];
 
-    protected $appends = ['role_id','permissions', 'can_update', 'can_delete', 'can_approve'];
+    protected $appends = ['role_id','permissions', 'can_update', 'can_delete', 'can_approve', 'can_print'];
     protected $casts = ['email_verified_at' => 'datetime'];
 
     public function hasAuthority($abilities){
@@ -142,7 +143,12 @@ class User extends Authenticatable implements Transformable
     }
 
     public function getCanDeleteAttribute(){
-        return true;
+        return $this->defaultCanUpdateAttribute();
+    }
+
+    public function getCanPrintAttribute(){
+        // return $this->defaultCanPrintAttribute();
+        return false;
     }
 
     public function getCanUpdateAttribute(){
