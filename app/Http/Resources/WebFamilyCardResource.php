@@ -20,7 +20,8 @@ class WebFamilyCardResource extends JsonResource
             'no_kk' => $this->no_kk,
             'address' => $this->address,
             'users' => WebUserResource::collection($this->whenLoaded('WebUsers')),
-            'can_delete' => true
+            'can_delete' => true,
+            'can_convert' => $this->can_convert
         ];
     }
 }

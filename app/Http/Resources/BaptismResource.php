@@ -21,7 +21,9 @@ class BaptismResource extends JsonResource
             'date' => $this->date,
             'who_baptism' => $this->who_baptism,
             'user' => new UserSertificateSelect($this->whenLoaded('user')),
-            'can_delete' => true
+            'can_delete' => $this->can_delete,
+            'can_update' => $this->can_update,
+            'can_print' => $this->can_print,
         ];
     }
 }

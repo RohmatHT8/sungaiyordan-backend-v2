@@ -25,7 +25,7 @@ class NumberSetting extends Model implements Transformable
     protected $fillable = ['name','transaction_id','reset_type','need_approval'];
     protected $dates = ['deleted_at'];
 
-    protected $appends = ['can_approve','can_update','can_delete','can_print','approved_by'];
+    // protected $appends = ['can_approve','can_update','can_delete','can_print','approved_by'];
 
     public function transaction(){
         return $this->belongsTo('App\Entities\Transaction');

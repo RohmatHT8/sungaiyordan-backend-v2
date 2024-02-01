@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,6 +31,8 @@ Route::post('logout', function(Request $request){
 })->middleware(['auth:api']);
 
 Route::group(['middleware' => ['capture-request']], function () {
+    Route::get('widget/barchart', 'UsersController@barchart')->middleware(['auth:api','can:widget-barchart']);;
+
     Route::get('select/user', 'UsersController@select')->middleware([
         'auth:api',
         'can:branch-index',
@@ -115,6 +116,7 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::post('shdr','ShdrsController@store')->middleware(['auth:api','can:shdr-create']);
     Route::put('shdr/{id}','ShdrsController@update')->middleware(['auth:api','can:shdr-update']);
     Route::delete('shdr/{id}','ShdrsController@destroy')->middleware(['auth:api','can:shdr-delete']);
+    Route::get('shdr/{id}/print','ShdrsController@show')->middleware(['auth:api','can:shdr-create']);
     
     Route::get('baptism', 'BaptismsController@index')->middleware(['auth:api','can:baptism-index']);
     Route::get('baptism/{id}', 'BaptismsController@show')->middleware(['auth:api','can:baptism-read']);
@@ -147,9 +149,21 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::delete('familycard/{id}','FamilyCardsController@destroy')->middleware(['auth:api','can:familycard-delete']);
     
     Route::get('webuser', 'WebUsersController@index')->middleware(['auth:api', 'can:webuser-index']);
-
+    
     Route::get('webfamilycard', 'WebFamilyCardsController@index')->middleware(['auth:api', 'can:webfamilycard-index']);
     Route::get('webfamilycard/{id}', 'WebFamilyCardsController@show')->middleware(['auth:api', 'can:webfamilycard-read']);
+    Route::post('familycardconvert','WebFamilyCardsController@convert')->middleware(['auth:api','can:webfamilycard-create']);
+
+    Route::get('widget','WidgetsController@index')->middleware(['auth:api','can:widget-index']);
+    Route::get('widget/{id}','WidgetsController@show')->middleware(['auth:api','can:widget-read']);
+    Route::put('widget/{id}','WidgetsController@update')->middleware(['auth:api','can:widget-update']);
+
+    Route::get('widgetpermissionsetting','WidgetPermissionSettingsController@index')->middleware(['auth:api', 'can:widgetpermissionsetting-index']);
+    Route::get('widgetpermissionsetting/{id}','WidgetPermissionSettingsController@show')->middleware(['auth:api', 'can:widgetpermissionsetting-read']);
+    Route::post('widgetpermissionsetting','WidgetPermissionSettingsController@store')->middleware(['auth:api', 'can:widgetpermissionsetting-create']);
+    Route::put('widgetpermissionsetting/{id}','WidgetPermissionSettingsController@update')->middleware(['auth:api', 'can:widgetpermissionsetting-update']);
+    Route::delete('widgetpermissionsetting/{id}','WidgetPermissionSettingsController@destroy')->middleware(['auth:api', 'can:widgetpermissionsetting-delete']);
+    Route::delete('widgetpermissionsetting','WidgetPermissionSettingsController@destroyAll')->middleware(['auth:api', 'can:widgetpermissionsetting-delete']);
 });
 
 Route::get('select/branchWeb', 'BranchesController@select');

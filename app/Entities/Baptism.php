@@ -34,4 +34,17 @@ class Baptism extends Model implements Transformable
         return $this->belongsTo('App\Entities\Branch','place_of_baptism_inside');
     }
 
+    public function getCanDeleteAttribute() {
+        return true;
+    }
+
+    public function getCanPrintAttribute() {
+        return $this->defaultCanPrintAttribute();
+    }
+
+    public function getCanUpdateAttribute()
+    {
+    return $this->defaultCanUpdateAttribute();
+    }
+
 }

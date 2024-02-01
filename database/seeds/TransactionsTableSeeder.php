@@ -62,6 +62,12 @@ class TransactionsTableSeeder extends Seeder
             ],[
                 'name' => 'CongregationalStatus',
                 'subject' => 'App\Entities\CongregationalStatus'
+            ],[
+                'name' => 'Widget',
+                'subject' => 'App\Entities\Widget'
+            ],[
+                'name' => 'WidgetPermissionSetting',
+                'subject' => 'App\Entities\WidgetPermissionSetting'
             ]
         ];
 

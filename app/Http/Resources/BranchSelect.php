@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Log;
 
 class BranchSelect extends JsonResource
 {
@@ -17,7 +18,8 @@ class BranchSelect extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'code' => $this->code
+            'code' => $this->code,
+            'shepherd' => $this->Shepherd()->pluck('name')->first()
         ];
     }
 }

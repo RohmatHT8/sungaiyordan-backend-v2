@@ -54,6 +54,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\FamilyCardComponentRepository::class, \App\Repositories\FamilyCardComponentRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\CongregationalStatusRepository::class, \App\Repositories\CongregationalStatusRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\CongregationalStatusComponentRepository::class, \App\Repositories\CongregationalStatusComponentRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\WidgetRepository::class, \App\Repositories\WidgetRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\UserWidgetRepository::class, \App\Repositories\UserWidgetRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\WidgetPermissionRepository::class, \App\Repositories\WidgetPermissionRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\WidgetPermissionMappingRepository::class, \App\Repositories\WidgetPermissionMappingRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\WidgetPermissionSettingRepository::class, \App\Repositories\WidgetPermissionSettingRepositoryEloquent::class);
         //:end-bindings:
     }
 }

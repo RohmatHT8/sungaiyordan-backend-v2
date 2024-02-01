@@ -18,9 +18,10 @@ class ShdrResource extends JsonResource
             'branch' => new BranchSelect($this->whenLoaded('branch')),
             'no' => $this->no,
             'date_shdr' => $this->date_shdr,
+            'date_until' => $this->date_until,
             'who_signed' => $this->who_signed,
             'user' => new UserSertificateSelect($this->whenLoaded('user')),
-            'can_delete' => true
+            'can_print' => $this->can_print,
         ];
     }
 }

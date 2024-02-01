@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use App\Util\RelationshipsTrait;
+use App\Util\TransactionLogModelTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Prettus\Repository\Contracts\Transformable;
@@ -15,7 +16,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  */
 class Branch extends Model implements Transformable
 {
-    use TransformableTrait, SoftDeletes, RelationshipsTrait;
+    use TransformableTrait, SoftDeletes, RelationshipsTrait, TransactionLogModelTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -25,18 +26,14 @@ class Branch extends Model implements Transformable
     protected $fillable = ['code','name','address','telephone','shepherd_id','need_approval'];
     protected $date = ['deleted_at'];
 
-    protected $appends = ['can_approve','can_update','can_delete','can_print','approved_by'];
+    protected $appends = ['can_update','can_delete','can_print'];
 
     public function Shepherd(){
         return $this->belongsTo('App\Entities\User','shepherd_id')->withTrashed();
     }
 
-    public function getCanApproveAttribute() {
-        return true;
-    }
-
     public function getCanUpdateAttribute() {
-        return true;
+        return $this->defaultCanUpdateAttribute();
     }
 
     public function getCanDeleteAttribute() {
@@ -44,11 +41,7 @@ class Branch extends Model implements Transformable
     }
 
     public function getCanPrintAttribute() {
-        return true;
-    }
-
-    public function getApprovedByAttribute() {
-        return true;
+        return $this->defaultCanPrintAttribute();
     }
 
 }

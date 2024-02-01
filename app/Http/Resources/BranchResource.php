@@ -22,9 +22,8 @@ class BranchResource extends JsonResource
             'address' => $this->address,
             'telephone'=> $this->telephone,
             'user' => new UserSelect($this->whenLoaded('Shepherd')),
-            'need_approval' => $this->need_approval,
-            'can_approve' => $this->can_approve,
-            'can_update' => $this->can_update
+            'can_update' => $this->can_update,
+            'can_print' => $this->can_print
         ];
     }
 }

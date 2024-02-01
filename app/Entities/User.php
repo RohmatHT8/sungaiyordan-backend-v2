@@ -25,7 +25,7 @@ class User extends Authenticatable implements Transformable
 
     protected $hidden = ['password', 'remember_token'];
 
-    protected $appends = ['role_id','permissions', 'can_update', 'can_delete', 'can_approve', 'can_print'];
+    protected $appends = ['role_id','permissions', 'can_update', 'can_delete', 'can_approve', 'can_print','widget_permissions'];
     protected $casts = ['email_verified_at' => 'datetime'];
 
     public function hasAuthority($abilities){
@@ -130,6 +130,21 @@ class User extends Authenticatable implements Transformable
         return $permissions;
     }
 
+    public function getWidgetPermissionsAttribute(){
+        if(Auth::user()->role_id == 1) {
+            return array_column(WidgetPermission::all()->toArray(), 'ability');
+        }
+
+        return WidgetPermission::whereHas('mappings',function ($mapping){
+            $mapping->whereIn('role_id',$this->getSubordinatesRoleId())
+                ->whereIn('branch_id',Auth::user()->branches()->pluck('branches.id')->all());
+        })->pluck('ability')->all();
+    }
+
+    public function widgets(){
+        return $this->hasMany('App\Entities\UserWidget');
+    }
+    
     public function congregationStatuses() {
         return $this->hasMany('App\Entities\CongregationalStatus');
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Criteria\BranchCriteria;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -41,8 +42,8 @@ class FamilyCardsController extends Controller
     public function index(Request $request)
     {
         $this->repository->pushCriteria(app('App\Criteria\OrderCriteria'));
+        $this->repository->pushCriteria(new BranchCriteria(null, null, 'users.id'));
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-
         return new FamilyCardCollection($this->repository->paginate($request->per_page)); 
     }
 

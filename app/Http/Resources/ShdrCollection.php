@@ -24,7 +24,7 @@ class ShdrCollection extends ResourceCollection
                     'place_shdr' => $model->branch->name,
                     'date_shdr' => $model->date_shdr,
                     'no' => $model->no,
-                    'can_delete' => true
+                    'can_delete' => $model->can_delete,
                 ];
             })
         ];
