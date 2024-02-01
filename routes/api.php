@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function (Request $request) {
-    return 'OK Success';
-});
+// Route::get('/', function (Request $request) {
+//     return 'OK Success';
+// });
 
 Route::get('auth', function (Request $request) {
     return new App\Http\Resources\AuthUserResource(Auth::user());
