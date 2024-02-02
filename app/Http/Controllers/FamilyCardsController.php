@@ -18,7 +18,6 @@ use App\Util\Helper;
 use App\Util\TransactionLogControllerTrait;
 use App\Validators\FamilyCardValidator;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 /**

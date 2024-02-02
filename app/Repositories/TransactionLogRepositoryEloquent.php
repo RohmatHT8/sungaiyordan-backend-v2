@@ -6,7 +6,6 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\TransactionLogRepository;
 use App\Entities\TransactionLog;
-use App\Validators\TransactionLogValidator;
 
 /**
  * Class TransactionLogRepositoryEloquent.

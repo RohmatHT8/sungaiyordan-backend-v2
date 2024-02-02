@@ -6,7 +6,6 @@ use App\Entities\Transaction;
 use App\Entities\TransactionAttribute;
 use ErrorException;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Support\Facades\Log;
 use ReflectionClass;
 use ReflectionMethod;
 

@@ -15,7 +15,6 @@ use App\Http\Resources\BranchSelect;
 use App\Repositories\BranchRepository;
 use App\Validators\BranchValidator;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class BranchesController extends Controller
 {

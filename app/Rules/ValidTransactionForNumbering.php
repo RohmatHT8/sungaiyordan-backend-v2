@@ -5,7 +5,6 @@ namespace App\Rules;
 use App\Entities\NumberSetting;
 use App\Entities\Transaction;
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
 class ValidTransactionForNumbering implements Rule

@@ -15,7 +15,6 @@ use App\Repositories\WebUserRepository;
 use App\Validators\WebUserValidator;
 use Illuminate\Cache\Repository;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class WebUsersController.

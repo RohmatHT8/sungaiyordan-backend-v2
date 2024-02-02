@@ -35,8 +35,6 @@ use App\Util\TransactionLogControllerTrait;
 use App\Validators\UserValidator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class UsersController extends Controller

@@ -15,7 +15,6 @@ use App\Repositories\MarriageCertificateRepository;
 use App\Util\Helper;
 use App\Util\TransactionLogControllerTrait;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class MarriageCertificatesController.

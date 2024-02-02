@@ -6,7 +6,6 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\ApprovalLogRepository;
 use App\Entities\ApprovalLog;
-use App\Validators\ApprovalLogValidator;
 
 /**
  * Class ApprovalLogRepositoryEloquent.

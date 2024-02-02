@@ -10,8 +10,6 @@ use App\Entities\Role;
 use App\Entities\TransactionLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Laravel\Passport\Passport;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Illuminate\Validation\ValidationException;
 

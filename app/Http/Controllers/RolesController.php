@@ -15,7 +15,6 @@ use App\Http\Resources\RoleSelect;
 use App\Repositories\RoleRepository;
 use App\Util\TransactionLogControllerTrait;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class RolesController.

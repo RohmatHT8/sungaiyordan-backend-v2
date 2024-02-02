@@ -2,8 +2,6 @@
 
 namespace App\Util;
 
-use App\Entities\Permission;
-use App\Entities\Role;
 use App\Entities\Transaction;
 use App\Entities\TransactionLog;
 use App\Entities\User;

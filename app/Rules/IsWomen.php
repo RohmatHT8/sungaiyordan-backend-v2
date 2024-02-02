@@ -4,7 +4,6 @@ namespace App\Rules;
 
 use App\Entities\User;
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Facades\Log;
 
 class IsWomen implements Rule
 {

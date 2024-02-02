@@ -16,7 +16,6 @@ use App\Util\Helper;
 use App\Util\TransactionLogControllerTrait;
 use App\Validators\ChildSubmissionValidator;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class ChildSubmissionsController.

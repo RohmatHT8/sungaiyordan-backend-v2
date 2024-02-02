@@ -17,7 +17,6 @@ use App\Repositories\PermissionSettingRepository;
 use App\Util\TransactionLogControllerTrait;
 use App\Validators\PermissionSettingValidator;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class PermissionSettingsController.

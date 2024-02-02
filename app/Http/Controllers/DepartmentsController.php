@@ -15,7 +15,6 @@ use App\Http\Resources\DepartmentSelect;
 use App\Repositories\DepartmentRepository;
 use App\Util\TransactionLogControllerTrait;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class DepartmentsController.

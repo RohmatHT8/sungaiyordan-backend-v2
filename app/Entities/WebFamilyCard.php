@@ -4,7 +4,6 @@ namespace App\Entities;
 
 use App\Util\RelationshipsTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 

@@ -37,8 +37,6 @@ class DemoCron extends Command
      */
     public function handle()
     {
-        if(2 === 2) {
-            \Log::info("Cron job Berhasil di jalankan " . date('Y-m-d H:i:s'));
-        }
+        
     }
 }
