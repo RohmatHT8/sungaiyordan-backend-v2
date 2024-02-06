@@ -15,6 +15,9 @@ use App\Validators\FamilyCardValidator;
  */
 class FamilyCardRepositoryEloquent extends BaseRepository implements FamilyCardRepository
 {
+    protected $fieldSearchable = [
+        'no' => 'like',
+    ];
     /**
      * Specify Model class name
      *
