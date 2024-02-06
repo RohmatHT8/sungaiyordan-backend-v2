@@ -17,6 +17,7 @@ class FamilyCardRepositoryEloquent extends BaseRepository implements FamilyCardR
 {
     protected $fieldSearchable = [
         'no' => 'like',
+        'components.user.name' => 'like'
     ];
     /**
      * Specify Model class name
