@@ -21,6 +21,7 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
         'nik' => 'like',
         'name' => 'like',
         'email' => 'like',
+        'no_ktp' => 'like',
     ];
     /**
      * Specify Model class name
