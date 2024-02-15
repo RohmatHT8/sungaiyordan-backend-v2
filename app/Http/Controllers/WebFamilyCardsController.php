@@ -4,17 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
 use App\Criteria\FamilyCardPerBranchCriteria;
+use App\Criteria\UserFamilyCardCriteria;
 use App\Http\Requests\WebFamilyCardCreateRequest;
 use App\Http\Requests\WebFamilyCardUpdateRequest;
 use App\Http\Resources\WebFamilyCardCollection;
 use App\Http\Resources\WebFamilyCardResource;
 use App\Repositories\UserRepository;
 use App\Repositories\WebFamilyCardRepository;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Class WebFamilyCardsController.
@@ -37,6 +34,7 @@ class WebFamilyCardsController extends Controller
         $this->repository->pushCriteria(app('App\Criteria\OrderCriteria'));
         $this->repository->pushCriteria(new FamilyCardPerBranchCriteria);
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        $this->repository->pushCriteria(new UserFamilyCardCriteria);
         return new WebFamilyCardCollection($this->repository->paginate($request->per_page));
     }
 
