@@ -31,10 +31,12 @@ use App\Repositories\CongregationalStatusRepository;
 use App\Repositories\UserBranchRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\UserRoleRepository;
+use App\Util\Helper;
 use App\Util\TransactionLogControllerTrait;
 use App\Validators\UserValidator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class UsersController extends Controller
@@ -257,5 +259,18 @@ class UsersController extends Controller
 
     public function barchart() {
         return 'okk';
+    }
+
+    public function jemaat(Request $request) {
+
+        $type = explode('/',$request->url());
+        $type = $type[count($type)-1];
+        $cloneRequest = json_decode($request->all()[0],true);
+
+        $query = DB::table('users')
+        ->join('family_card_components', 'family_card_components.user_id','=','users.id')
+        ->join('branches', 'branches.id','=','users.main_branch_id');
+
+        return Helper::buildSql($query, $request);
     }
 }

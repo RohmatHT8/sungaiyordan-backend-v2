@@ -59,6 +59,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\WidgetPermissionRepository::class, \App\Repositories\WidgetPermissionRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\WidgetPermissionMappingRepository::class, \App\Repositories\WidgetPermissionMappingRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\WidgetPermissionSettingRepository::class, \App\Repositories\WidgetPermissionSettingRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ReportRepository::class, \App\Repositories\ReportRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ReportPermissionRepository::class, \App\Repositories\ReportPermissionRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ReportPermissionMappingRepository::class, \App\Repositories\ReportPermissionMappingRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ReportPermissionSettingRepository::class, \App\Repositories\ReportPermissionSettingRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ReportPermissionMappingRepository::class, \App\Repositories\ReportPermissionMappingRepositoryEloquent::class);
         //:end-bindings:
     }
 }

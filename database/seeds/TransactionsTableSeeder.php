@@ -68,7 +68,10 @@ class TransactionsTableSeeder extends Seeder
             ],[
                 'name' => 'WidgetPermissionSetting',
                 'subject' => 'App\Entities\WidgetPermissionSetting'
-            ]
+            ],[
+                'name' => 'ReportPermissionSetting',
+                'subject' => 'App\Entities\ReportPermissionSetting'
+            ],
         ];
 
         foreach ($transactions as $key => $value) {

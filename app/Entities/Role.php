@@ -5,6 +5,7 @@ namespace App\Entities;
 use App\Util\RelationshipsTrait;
 use App\Util\TransactionLogModelTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
@@ -15,7 +16,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  */
 class Role extends Model implements Transformable
 {
-    use TransformableTrait, RelationshipsTrait, TransactionLogModelTrait;
+    use TransformableTrait, SoftDeletes, RelationshipsTrait, TransactionLogModelTrait;
 
     protected $fillable = ['code','name','department_id','boss_id','need_approval'];
     protected $dates = ['deleted_at'];

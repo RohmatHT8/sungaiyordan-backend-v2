@@ -22,9 +22,7 @@ class IsExistUserId implements Rule
      */
     public function passes($attribute, $value)
     {
-        Log::info($attribute);
-        Log::info($value);
-        Log::info($this->entity);
+        return true;
     }
 
     /**

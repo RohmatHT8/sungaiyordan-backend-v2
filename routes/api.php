@@ -71,7 +71,12 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::get('select/transaction', 'TransactionsController@select')->middleware([
         'auth:api', 'can:numbersetting-index'
     ]);
+    Route::get('select/reportpermission', 'ReportPermissionsController@select')->middleware([
+        'auth:api', 'can:reportpermissionsetting-index'
+    ]);
     
+    Route::get('report/jemaat','UsersController@jemaat')->middleware(['auth:api', 'can:report-jemaat']);
+
     Route::get('user', 'UsersController@index')->middleware(['auth:api', 'can:user-index']);
     Route::get('user/{id}', 'UsersController@show')->middleware(['auth:api', 'can:user-read']);
     Route::post('user', 'UsersController@store')->middleware(['auth:api', 'can:user-create']);
@@ -164,6 +169,14 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::put('widgetpermissionsetting/{id}','WidgetPermissionSettingsController@update')->middleware(['auth:api', 'can:widgetpermissionsetting-update']);
     Route::delete('widgetpermissionsetting/{id}','WidgetPermissionSettingsController@destroy')->middleware(['auth:api', 'can:widgetpermissionsetting-delete']);
     Route::delete('widgetpermissionsetting','WidgetPermissionSettingsController@destroyAll')->middleware(['auth:api', 'can:widgetpermissionsetting-delete']);
+
+    Route::get('reportpermissionsetting','ReportPermissionSettingsController@index')->middleware(['auth:api', 'can:reportpermissionsetting-index']);
+    Route::get('reportpermissionsetting/{id}','ReportPermissionSettingsController@show')->middleware(['auth:api', 'can:reportpermissionsetting-read']);
+    Route::post('reportpermissionsetting','ReportPermissionSettingsController@store')->middleware(['auth:api', 'can:reportpermissionsetting-create']);
+    Route::put('reportpermissionsetting/{id}','ReportPermissionSettingsController@update')->middleware(['auth:api', 'can:reportpermissionsetting-update']);
+    Route::delete('reportpermissionsetting/{id}','ReportPermissionSettingsController@destroy')->middleware(['auth:api', 'can:reportpermissionsetting-delete']);
+    Route::delete('reportpermissionsetting','ReportPermissionSettingsController@destroyAll')->middleware(['auth:api', 'can:reportpermissionsetting-delete']);
+
 });
 
 Route::get('select/branchWeb', 'BranchesController@select');

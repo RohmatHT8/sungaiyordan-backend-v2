@@ -24,7 +24,7 @@ class User extends Authenticatable implements Transformable
 
     protected $hidden = ['password', 'remember_token'];
 
-    protected $appends = ['role_id','permissions', 'can_update', 'can_delete', 'can_approve', 'can_print','widget_permissions'];
+    protected $appends = ['role_id','permissions', 'can_update', 'can_delete', 'can_approve', 'can_print','widget_permissions','report_permissions'];
     protected $casts = ['email_verified_at' => 'datetime'];
 
     public function hasAuthority($abilities){
@@ -161,7 +161,6 @@ class User extends Authenticatable implements Transformable
     }
 
     public function getCanPrintAttribute(){
-        // return $this->defaultCanPrintAttribute();
         return false;
     }
 
@@ -171,5 +170,16 @@ class User extends Authenticatable implements Transformable
 
     public function getCanApproveAttribute(){
         return true;
+    }
+
+    public function getReportPermissionsAttribute(){
+        if(Auth::user()->role_id == 1) {
+            return array_column(ReportPermission::all()->toArray(), 'ability');
+        }
+
+        return ReportPermission::whereHas('mappings',function ($mapping){
+            $mapping->whereIn('role_id',$this->getSubordinatesRoleId())
+                ->whereIn('branch_id',Auth::user()->branches()->pluck('branches.id')->all());
+        })->pluck('ability')->all();
     }
 }
