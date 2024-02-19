@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use App\Util\RelationshipsTrait;
 use App\Util\TransactionLogModelTrait;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
@@ -14,7 +15,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  */
 class PermissionSetting extends Model implements Transformable
 {
-    use TransformableTrait, TransactionLogModelTrait;
+    use TransformableTrait, TransactionLogModelTrait, RelationshipsTrait;
 
     protected $fillable = ['need_approval'];
 

@@ -75,7 +75,7 @@ Route::group(['middleware' => ['capture-request']], function () {
         'auth:api', 'can:reportpermissionsetting-index'
     ]);
     
-    Route::get('report/jemaat','UsersController@jemaat')->middleware(['auth:api', 'can:report-jemaat']);
+    Route::get('report/jemaat','UsersController@jemaat');
 
     Route::get('user', 'UsersController@index')->middleware(['auth:api', 'can:user-index']);
     Route::get('user/{id}', 'UsersController@show')->middleware(['auth:api', 'can:user-read']);

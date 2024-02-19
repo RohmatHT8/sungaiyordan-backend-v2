@@ -269,7 +269,8 @@ class UsersController extends Controller
 
         $query = DB::table('users')
         ->join('family_card_components', 'family_card_components.user_id','=','users.id')
-        ->join('branches', 'branches.id','=','users.main_branch_id');
+        ->join('branches', 'branches.id','=','users.main_branch_id')
+        ->whereIn('users.main_branch_id',$cloneRequest['branch_ids']);
 
         return Helper::buildSql($query, $request);
     }

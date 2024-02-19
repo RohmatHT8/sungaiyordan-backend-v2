@@ -12,6 +12,7 @@ use Prettus\Repository\Traits\TransformableTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements Transformable
@@ -53,24 +54,24 @@ class User extends Authenticatable implements Transformable
         //     return true;
         // }
 
-        // $reportPermissions = ReportPermission::whereIn('ability',explode('|',$abilities))->get();
-        // foreach ($reportPermissions as $reportPermission){
-        //     if($reportPermission->mappings()
-        //         ->whereIn('branch_id',$this->branches()->pluck('branches.id')->all())
-        //         ->whereIn('role_id',$this->getSubordinatesRoleId())->count()){
-        //         return true;
-        //     }
-        // }
+        $reportPermissions = ReportPermission::whereIn('ability',explode('|',$abilities))->get();
+        foreach ($reportPermissions as $reportPermission){
+            if($reportPermission->mappings()
+                ->whereIn('branch_id',$this->branches()->pluck('branches.id')->all())
+                ->whereIn('role_id',$this->getSubordinatesRoleId())->count()){
+                return true;
+            }
+        }
 
-        // $widgetPermissions = WidgetPermission::whereIn('ability',explode('|',$abilities))->get();
-        // foreach ($widgetPermissions as $widgetPermission){
-        //     if($widgetPermission->mappings()
-        //         ->whereIn('branch_id',$this->branches()->pluck('branches.id')->all())
-        //         ->whereIn('role_id',$this->getSubordinatesRoleId())->count() ||
-        //         $widgetPermission->widget()->where('default',true)->count()){
-        //         return true;
-        //     }
-        // }
+        $widgetPermissions = WidgetPermission::whereIn('ability',explode('|',$abilities))->get();
+        foreach ($widgetPermissions as $widgetPermission){
+            if($widgetPermission->mappings()
+                ->whereIn('branch_id',$this->branches()->pluck('branches.id')->all())
+                ->whereIn('role_id',$this->getSubordinatesRoleId())->count() ||
+                $widgetPermission->widget()->where('default',true)->count()){
+                return true;
+            }
+        }
         return false;
     }
 
@@ -157,15 +158,15 @@ class User extends Authenticatable implements Transformable
     }
 
     public function getCanDeleteAttribute(){
-        return $this->defaultCanUpdateAttribute();
+        return $this->defaultCanDeleteAttribute();
     }
 
     public function getCanPrintAttribute(){
-        return false;
+        return $this->defaultCanPrintAttribute();
     }
 
     public function getCanUpdateAttribute(){
-        return true;
+        return $this->defaultCanUpdateAttribute();
     }
 
     public function getCanApproveAttribute(){

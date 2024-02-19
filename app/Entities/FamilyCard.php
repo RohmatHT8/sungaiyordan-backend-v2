@@ -19,12 +19,18 @@ class FamilyCard extends Model implements Transformable
 
     protected $fillable = ['branch_id','no','address'];
 
+    protected $append = ['can_delete'];
+
     public function branch(){
        return $this->belongsTo('App\Entities\Branch','branch_id');
     }
 
     public function components(){
         return $this->hasMany('App\Entities\FamilyCardComponent');
+    }
+
+    public function getCanDeleteAttribute() {
+        return $this->defaultCanDeleteAttribute();
     }
 
 }

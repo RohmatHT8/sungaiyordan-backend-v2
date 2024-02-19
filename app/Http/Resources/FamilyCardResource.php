@@ -20,7 +20,7 @@ class FamilyCardResource extends JsonResource
             'no' => $this->no,
             'address' => $this->address,
             'users' => FamilyCardComponentResource::collection($this->whenLoaded('components')),
-            'can_delete' => true
+            'can_delete' => $this->can_delete
         ];
     }
 }

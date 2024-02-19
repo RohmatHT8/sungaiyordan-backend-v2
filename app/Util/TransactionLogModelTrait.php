@@ -37,12 +37,12 @@ trait TransactionLogModelTrait
         return false;
     }
 
-    public function getCanUpdateAttribute(){
+    public function defaultCanUpdateAttribute(){
         $transaction = Transaction::where('subject',__CLASS__)->first();
         return (!empty(Auth::user()) && (Auth::user()->role_id==1 || Auth::user()->hasAuthority(strtolower($transaction->name).'-update')));
     }
 
-    public function defaultCanUpdateAttribute(){
+    public function defaultCanDeleteAttribute(){
         $transaction = Transaction::where('subject',__CLASS__)->first();
         return (!empty(Auth::user()) && (Auth::user()->role_id==1 || Auth::user()->hasAuthority(strtolower($transaction->name).'-delete')));
     }

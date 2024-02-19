@@ -22,7 +22,7 @@ class FamilyCardCollection extends ResourceCollection
                     'head_of_family' => !empty($model->components()->where('status','Kepala Keluarga')->first()->user) ? $model->components()->where('status','Kepala Keluarga')->first()->user->name:NULL,
                     'branch_name' => $model->branch->name,
                     'count' => $model->components->count(),
-                    'can_delete' => true,
+                    'can_delete' => $model->can_delete,
                 ];
             })
         ];
