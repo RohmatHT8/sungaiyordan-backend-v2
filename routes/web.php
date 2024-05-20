@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ShdrsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,9 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/shdr', 'ShdrsController@test');
+Route::get('/baptism', 'BaptismsController@test');
 
 //log-viewers
 Route::get('log-viewers', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);

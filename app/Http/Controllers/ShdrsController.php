@@ -15,7 +15,12 @@ use App\Repositories\ShdrRepository;
 use App\Util\Helper;
 use App\Util\TransactionLogControllerTrait;
 use App\Validators\ShdrValidator;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Barryvdh\DomPDF\PDF;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class ShdrsController.
@@ -43,8 +48,8 @@ class ShdrsController extends Controller
     {
         try {
             DB::beginTransaction();
-            if(empty($request->no)){
-                $request->merge(['no' => Helper::generateNo('Shdr',$request->date_shdr,$request->place_of_shdr)]);
+            if (empty($request->no)) {
+                $request->merge(['no' => Helper::generateNo('Shdr', $request->date_shdr, $request->place_of_shdr)]);
             }
             $shdr = $this->logStore($request, $this->repository);
             DB::commit();
@@ -58,7 +63,7 @@ class ShdrsController extends Controller
         }
     }
 
-    
+
     public function show($id)
     {
         $shdr = $this->repository->with(['user', 'branch'])->find($id);
@@ -69,7 +74,7 @@ class ShdrsController extends Controller
     {
         try {
             DB::beginTransaction();
-            $shdr = $this->logUpdate($request,$this->repository,$id);
+            $shdr = $this->logUpdate($request, $this->repository, $id);
             DB::commit();
 
             return ($this->show($shdr->id))->additional(['success' => true]);
@@ -82,11 +87,11 @@ class ShdrsController extends Controller
         }
     }
 
-    public function destroy(Request $request,$id)
+    public function destroy(Request $request, $id)
     {
         try {
             DB::beginTransaction();
-            $shdrs = $this->logDestroy($request,$this->repository,$id);
+            $shdrs = $this->logDestroy($request, $this->repository, $id);
             DB::commit();
 
             return response()->json([
@@ -99,5 +104,26 @@ class ShdrsController extends Controller
                 'message' => $e->getMessageBag()
             ]);
         }
+    }
+
+    public function generatePdf($id)
+    {
+        $data = ($this->show($id))->additional(['success' => true]);
+        $dompdf = new Dompdf();
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $dompdf->setOptions($options);
+        $dompdf->loadHtml(view('shdr', compact('data')));
+        $dompdf->render();
+        return $dompdf->stream('document.pdf');
+    }
+
+    public function test()
+    {
+
+        $data = ($this->show(203))->additional(['success' => true]);
+        Log::info(json_decode(json_encode($data),true));
+        return view('shdr', compact('data'));
     }
 }

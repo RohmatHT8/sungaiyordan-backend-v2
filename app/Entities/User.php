@@ -83,8 +83,10 @@ class User extends Authenticatable implements Transformable
         return $this->belongsToMany('App\Entities\Role','user_roles')->withPivot('valid_from');
     }
 
-    public function findForPassport($identifier) {
-        return $this->orWhere('email', $identifier)->first();
+    public function findForPassport($username) {
+        return $this->where(function ($query)use ($username) {
+            $query->where('nik', $username)->orWhere('email',$username);
+        })->first();
     }
 
     public function getSubordinatesRoleId(){

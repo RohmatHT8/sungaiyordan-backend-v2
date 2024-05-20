@@ -15,7 +15,11 @@ use App\Repositories\BaptismRepository;
 use App\Util\Helper;
 use App\Util\TransactionLogControllerTrait;
 use App\Validators\BaptismValidator;
+use DateTime;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class BaptismsController.
@@ -101,5 +105,27 @@ class BaptismsController extends Controller
                 'message' => $e->getMessageBag()
             ]);
         }
+    }
+    public function generatePdf($id)
+    {
+        $data = ($this->show($id))->additional(['success' => true]);
+        $cd = explode(',', Helper::convertIDDate($data['date']));
+        $dompdf = new Dompdf();
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $dompdf->setOptions($options);
+        $dompdf->loadHtml(view('baptism', compact('data', 'cd')));
+        $dompdf->render();
+        return $dompdf->stream('document.pdf');
+    }
+    public function test()
+    {
+        $data = ($this->show(236))->additional(['success' => true]);
+        $cd = explode(',', Helper::convertIDDate($data['date']));
+        Log::info($cd);
+
+        Log::info(json_decode(json_encode($data),true));
+        return view('baptism', compact('data', 'cd'));
     }
 }

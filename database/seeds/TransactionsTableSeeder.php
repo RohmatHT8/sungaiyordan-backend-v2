@@ -71,6 +71,18 @@ class TransactionsTableSeeder extends Seeder
             ],[
                 'name' => 'ReportPermissionSetting',
                 'subject' => 'App\Entities\ReportPermissionSetting'
+            ],[
+                'name' => 'Building',
+                'subject' => 'App\Entities\Building'
+            ],[
+                'name' => 'Room',
+                'subject' => 'App\Entities\Room'
+            ],[
+                'name' => 'ItemType',
+                'subject' => 'App\Entities\ItemType'
+            ],[
+                'name' => 'Item',
+                'subject' => 'App\Entities\Item'
             ],
         ];
 

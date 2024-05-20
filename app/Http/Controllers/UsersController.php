@@ -161,7 +161,7 @@ class UsersController extends Controller
         }
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         try {
             DB::beginTransaction();

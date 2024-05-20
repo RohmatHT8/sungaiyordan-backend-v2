@@ -64,6 +64,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\ReportPermissionMappingRepository::class, \App\Repositories\ReportPermissionMappingRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\ReportPermissionSettingRepository::class, \App\Repositories\ReportPermissionSettingRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\ReportPermissionMappingRepository::class, \App\Repositories\ReportPermissionMappingRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\BuildingRepository::class, \App\Repositories\BuildingRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\RoomRepository::class, \App\Repositories\RoomRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ItemTypeRepository::class, \App\Repositories\ItemTypeRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ItemRepository::class, \App\Repositories\ItemRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ItemBranchRepository::class, \App\Repositories\ItemBranchRepositoryEloquent::class);
         //:end-bindings:
     }
 }

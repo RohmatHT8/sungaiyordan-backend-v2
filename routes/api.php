@@ -4,21 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-// Route::get('/', function (Request $request) {
-//     return 'OK Success';
-// });
-
 Route::get('auth', function (Request $request) {
     return new App\Http\Resources\AuthUserResource(Auth::user());
 })->middleware(['auth:api']);
@@ -74,6 +59,9 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::get('select/reportpermission', 'ReportPermissionsController@select')->middleware([
         'auth:api', 'can:reportpermissionsetting-index'
     ]);
+    Route::get('select/building', 'BuildingsController@select')->middleware(['auth:api']);
+    Route::get('select/itemtype', 'ItemTypesController@select')->middleware(['auth:api']);
+    Route::get('select/room', 'RoomsController@select')->middleware(['auth:api']);
 
     Route::get('report/jemaat', 'UsersController@jemaat');
 
@@ -121,13 +109,14 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::post('shdr', 'ShdrsController@store')->middleware(['auth:api', 'can:shdr-create']);
     Route::put('shdr/{id}', 'ShdrsController@update')->middleware(['auth:api', 'can:shdr-update']);
     Route::delete('shdr/{id}', 'ShdrsController@destroy')->middleware(['auth:api', 'can:shdr-delete']);
-    Route::get('shdr/{id}/print', 'ShdrsController@show')->middleware(['auth:api', 'can:shdr-create']);
+    Route::get('shdr/{id}/print', 'ShdrsController@generatePdf')->middleware(['auth:api', 'can:shdr-create']);
 
     Route::get('baptism', 'BaptismsController@index')->middleware(['auth:api', 'can:baptism-index']);
     Route::get('baptism/{id}', 'BaptismsController@show')->middleware(['auth:api', 'can:baptism-read']);
     Route::post('baptism', 'BaptismsController@store')->middleware(['auth:api', 'can:baptism-create']);
     Route::put('baptism/{id}', 'BaptismsController@update')->middleware(['auth:api', 'can:baptism-update']);
     Route::delete('baptism/{id}', 'BaptismsController@destroy')->middleware(['auth:api', 'can:baptism-delete']);
+    Route::get('baptism/{id}/print', 'BaptismsController@generatePdf')->middleware(['auth:api', 'can:baptism-create']);
 
     Route::get('childsubmission', 'ChildSubmissionsController@index')->middleware(['auth:api', 'can:childsubmission-index']);
     Route::get('childsubmission/{id}', 'ChildSubmissionsController@show')->middleware(['auth:api', 'can:childsubmission-read']);
@@ -176,6 +165,30 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::put('reportpermissionsetting/{id}', 'ReportPermissionSettingsController@update')->middleware(['auth:api', 'can:reportpermissionsetting-update']);
     Route::delete('reportpermissionsetting/{id}', 'ReportPermissionSettingsController@destroy')->middleware(['auth:api', 'can:reportpermissionsetting-delete']);
     Route::delete('reportpermissionsetting', 'ReportPermissionSettingsController@destroyAll')->middleware(['auth:api', 'can:reportpermissionsetting-delete']);
+
+    Route::get('building', 'BuildingsController@index')->middleware(['auth:api','can:building-index']);
+    Route::get('building/{id}', 'BuildingsController@show')->middleware(['auth:api','can:building-read']);
+    Route::post('building', 'BuildingsController@store')->middleware(['auth:api','can:building-create']);
+    Route::put('building/{id}', 'BuildingsController@update')->middleware(['auth:api','can:building-update']);
+    Route::delete('building/{id}', 'BuildingsController@destroy')->middleware(['auth:api','can:building-delete']);
+
+    Route::get('room', 'RoomsController@index')->middleware(['auth:api', 'can:room-index']);
+    Route::get('room/{id}', 'RoomsController@show')->middleware(['auth:api', 'can:room-read']);
+    Route::post('room', 'RoomsController@store')->middleware(['auth:api', 'can:room-create']);
+    Route::put('room/{id}', 'RoomsController@update')->middleware(['auth:api', 'can:room-update']);
+    Route::delete('room/{id}', 'RoomsController@destroy')->middleware(['auth:api', 'can:room-delete']);
+
+    Route::get('itemtype', 'ItemTypesController@index')->middleware(['auth:api', 'can:itemtype-index']);
+    Route::get('itemtype/{id}', 'ItemTypesController@show')->middleware(['auth:api', 'can:itemtype-read']);
+    Route::post('itemtype', 'ItemTypesController@store')->middleware(['auth:api', 'can:itemtype-create']);
+    Route::put('itemtype/{id}', 'ItemTypesController@update')->middleware(['auth:api', 'can:itemtype-update']);
+    Route::delete('itemtype/{id}', 'ItemTypesController@destroy')->middleware(['auth:api', 'can:itemtype-delete']);
+
+    route::get('item', 'ItemsController@index')->middleware(['auth:api', 'can:item-index']);
+    route::get('item/{id}', 'ItemsController@show')->middleware(['auth:api', 'can:item-read']);
+    route::post('item', 'ItemsController@store')->middleware(['auth:api', 'can:item-create']);
+    route::put('item/{id}', 'ItemsController@update')->middleware(['auth:api', 'can:item-update']);
+    route::delete('item/{id}', 'ItemsController@destroy')->middleware(['auth:api', 'can:item-delete']);
 });
 
 Route::get('select/branchWeb', 'BranchesController@select');

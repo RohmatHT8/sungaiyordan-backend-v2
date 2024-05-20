@@ -41,7 +41,7 @@ use SplFixedArray;
 
 class Helper
 {
-    public static function generateNo($transactionName,$date=null,$branchId=null,$departmentId=null,$subjectId=null) {
+    public static function generateNo($transactionName,$date=null,$branchId=null,$departmentId=null,$subjectId=null,$typeId=null) {
         $transaction = Transaction::where('name',$transactionName)->first();
         $numberSetting = NumberSetting::where('transaction_id',$transaction->id)->lockForUpdate()->first();
         if(empty($numberSetting)){
@@ -134,7 +134,6 @@ class Helper
                     break;
             }
         }
-
         $dateColumn = Schema::hasColumn((new $transaction->subject)->getTable(), 'date')?'date':'created_at';
         $queryNoSlice = explode('/',$queryNo)[4];
         $subjectNos = ($transaction->subject)::whereRaw("no like '%".$queryNoSlice."'")->when(!empty($subjectId), function($q) use ($subjectId){
@@ -239,6 +238,44 @@ class Helper
             'meta' => $meta
         ]);
     }
+
+    public static function convertIDDate($date){
+        
+
+        $date = new DateTime($date);
+        $day = $date->format('l'); // Hari dalam bahasa Inggris
+        $dateFormatted = $date->format('d F Y'); // Tanggal dalam format '24 Mei 1998'
+
+        $dayIndonesian = array(
+            'Sunday' => 'Minggu',
+            'Monday' => 'Senin',
+            'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis',
+            'Friday' => 'Jumat',
+            'Saturday' => 'Sabtu'
+        );
+
+        $monthIndonesian = array(
+            'January' => 'Januari',
+            'February' => 'Februari',
+            'March' => 'Maret',
+            'April' => 'April',
+            'May' => 'Mei',
+            'June' => 'Juni',
+            'July' => 'Juli',
+            'August' => 'Agustus',
+            'September' => 'September',
+            'October' => 'Oktober',
+            'November' => 'November',
+            'December' => 'Desember'
+        );
+
+        $dayIndonesianFormatted = str_replace(array_keys($dayIndonesian), array_values($dayIndonesian), $day);
+        $dateIndonesianFormatted = str_replace(array_keys($monthIndonesian), array_values($monthIndonesian), $dateFormatted);
+        $finalFormattedDate = $dayIndonesianFormatted . ', ' . $dateIndonesianFormatted;
+        return $finalFormattedDate;
+    } 
 
     public static function newCreateResponseFromData(&$data,$request,$totalCount,$page,$perPage){
         $export = false;
