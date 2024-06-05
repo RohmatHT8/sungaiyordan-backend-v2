@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\User;
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
-use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\BaptismCreateRequest;
 use App\Http\Requests\BaptismUpdateRequest;
@@ -14,8 +13,6 @@ use App\Http\Resources\BaptismResource;
 use App\Repositories\BaptismRepository;
 use App\Util\Helper;
 use App\Util\TransactionLogControllerTrait;
-use App\Validators\BaptismValidator;
-use DateTime;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\DB;
@@ -110,12 +107,14 @@ class BaptismsController extends Controller
     {
         $data = ($this->show($id))->additional(['success' => true]);
         $cd = explode(',', Helper::convertIDDate($data['date']));
+        $db = explode(',', Helper::convertIDDate($data['user']->date_of_birth));
+        $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
         $dompdf = new Dompdf();
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', true);
         $dompdf->setOptions($options);
-        $dompdf->loadHtml(view('baptism', compact('data', 'cd')));
+        $dompdf->loadHtml(view('baptism', compact('data', 'cd', 'db', 'shepherd')));
         $dompdf->render();
         return $dompdf->stream('document.pdf');
     }
@@ -123,9 +122,9 @@ class BaptismsController extends Controller
     {
         $data = ($this->show(236))->additional(['success' => true]);
         $cd = explode(',', Helper::convertIDDate($data['date']));
-        Log::info($cd);
+        $db = explode(',', Helper::convertIDDate($data['user']->date_of_birth));
+        $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
 
-        Log::info(json_decode(json_encode($data),true));
-        return view('baptism', compact('data', 'cd'));
+        return view('baptism', compact('data', 'cd', 'db', 'shepherd'));
     }
 }

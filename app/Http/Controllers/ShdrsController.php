@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -17,6 +18,7 @@ use App\Util\TransactionLogControllerTrait;
 use App\Validators\ShdrValidator;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Barryvdh\DomPDF\PDF;
+use DateTime;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\DB;
@@ -109,12 +111,17 @@ class ShdrsController extends Controller
     public function generatePdf($id)
     {
         $data = ($this->show($id))->additional(['success' => true]);
+        $age = $this->calculateAge($data['user']->date_of_birth);
+        $date = explode(',', Helper::convertIDDate($data['date_shdr']));
+        $dateUntil = explode(',', Helper::convertIDDate($data['date_until']));
+        $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
+
         $dompdf = new Dompdf();
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', true);
         $dompdf->setOptions($options);
-        $dompdf->loadHtml(view('shdr', compact('data')));
+        $dompdf->loadHtml(view('shdr', compact('data', 'age', 'date', 'dateUntil', 'shepherd')));
         $dompdf->render();
         return $dompdf->stream('document.pdf');
     }
@@ -123,7 +130,18 @@ class ShdrsController extends Controller
     {
 
         $data = ($this->show(203))->additional(['success' => true]);
+        $age = $this->calculateAge($data['user']->date_of_birth);
+        $date = explode(',', Helper::convertIDDate($data['date_shdr']));
+        $dateUntil = explode(',', Helper::convertIDDate($data['date_until']));
+        $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
         Log::info(json_decode(json_encode($data),true));
-        return view('shdr', compact('data'));
+        return view('shdr', compact('data', 'age', 'date', 'dateUntil', 'shepherd'));
+    }
+
+    public function calculateAge($birthdate) {
+        $birthDate = new DateTime($birthdate);
+        $today = new DateTime('today');
+        $age = $today->diff($birthDate)->y;
+        return $age;
     }
 }

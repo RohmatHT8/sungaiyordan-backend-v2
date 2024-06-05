@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/shdr', 'ShdrsController@test');
 Route::get('/baptism', 'BaptismsController@test');
+Route::get('/marriage', 'MarriageCertificatesController@test');
+Route::get('/child', 'childSubmissionsController@test');
 
 //log-viewers
 Route::get('log-viewers', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);

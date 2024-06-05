@@ -18,6 +18,7 @@ class BranchSelect extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
+            'address' => $this->address,
             'shepherd' => $this->Shepherd()->pluck('name')->first()
         ];
     }

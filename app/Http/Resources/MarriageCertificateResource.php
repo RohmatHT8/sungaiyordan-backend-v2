@@ -23,7 +23,8 @@ class MarriageCertificateResource extends JsonResource
             'groom' => new UserSertificateSelect($this->whenLoaded('grooms')),
             'bride' => new UserSertificateSelect($this->whenLoaded('brides')),
             'location' => $this->location,
-            'can_delete' => true
+            'can_delete' => true,
+            'can_print' => true,
         ];
     }
 }

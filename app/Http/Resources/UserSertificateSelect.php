@@ -18,6 +18,8 @@ class UserSertificateSelect extends JsonResource
             'id' => $this->id,
             'name' => $this->nik.' - '.$this->name,
             'address' => $this->address,
+            'place_of_birth' => $this->place_of_birth,
+            'date_of_birth' => $this->date_of_birth,
             'father' => $this->father,
             'mother' => $this->mother,  
         ];

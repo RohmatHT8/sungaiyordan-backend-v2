@@ -18,6 +18,7 @@ class BaptismResource extends JsonResource
             'branch' => new BranchSelect($this->whenLoaded('branch')),
             'no' => $this->no,
             'place_of_baptism_outside' => $this->place_of_baptism_outside,
+            // 'place_of_baptism_inside' => new BranchSelect($this->whenLoaded('branch')),
             'date' => $this->date,
             'who_baptism' => $this->who_baptism,
             'user' => new UserSertificateSelect($this->whenLoaded('user')),

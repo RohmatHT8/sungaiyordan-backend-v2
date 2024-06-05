@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -99,5 +100,15 @@ class ChildSubmissionsController extends Controller
                 'message' => $e->getMessageBag()
             ]);
         }
+    }
+
+    public function test()
+    {
+        $data = ($this->show(236))->additional(['success' => true]);
+        $cd = explode(',', Helper::convertIDDate($data['date']));
+        $db = explode(',', Helper::convertIDDate($data['user']->date_of_birth));
+        $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
+
+        return view('childSubmission', compact('data'));
     }
 }
