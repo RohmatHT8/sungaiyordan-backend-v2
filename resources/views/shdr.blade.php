@@ -5,19 +5,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sertifikat Nikah</title>
+    <title>Sertifikat SHDR</title>
     <style>
         .a4 {
             width: 21cm;
-            height: 29.7cm;
+            /* height: 29.7cm; */
+            /* border: black solid 1px; */
+            /* display: flex;
+            justify-content: center;
+            align-items: center; */
         }
-
+        
         .a5 {
             width: 14cm;
-            height: 20cm;
-            margin: 120px 200px;
-            display: flex;
-            align-items: end;
+            /* height: 20cm; */
+            margin: 230px 2.5cm 0px;
+            /* border: black solid 1px; */
             /* padding: 100px 70px; */
             /* text-align: center; */
         }
@@ -58,8 +61,7 @@
         }
 
         table tr td {
-            padding: 5px 0px;
-            /* border: black solid 1px; */
+            padding: 10px 0px;
         }
 
         .item {
@@ -116,8 +118,8 @@
                         </td>
                     </tr>
                 </table>
-                <p style="text-align: center; font-weight: 700; margin:15px 0px 0px 0px;">Sebagai tanda telah mengikuti</p>
-                <p style="text-align: center; font-weight: 700; font-size:1.4rem;margin:0px">Seminar Hidup Dalam Roh</p>
+                <p style="text-align: center; font-weight: 700; margin:20px 0px 0px 0px;">Sebagai tanda telah mengikuti</p>
+                <p style="text-align: center; font-weight: 700; font-size:1.4rem;margin:5px">Seminar Hidup Dalam Roh</p>
                 <p class="item">Tanggal <u>{{$date[1]}}</u> s/d <u>{{$dateUntil[1]}}</u></p>
                 <table>
                     <tr>
@@ -142,7 +144,7 @@
                             </td>
                         </tr>
                     </table>
-                    <div style="position: absolute; right:0; width:260px; text-align:center; top:45px">
+                    <div style="position: absolute; right:0; width:260px; text-align:center; top:50px">
                         <p style="font-size: 0.8rem; margin:0px;"><b>Gembala Jemaat</b></p>
                     </div>
                 </div>

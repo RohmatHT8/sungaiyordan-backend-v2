@@ -111,7 +111,7 @@ class ShdrsController extends Controller
     public function generatePdf($id)
     {
         $data = ($this->show($id))->additional(['success' => true]);
-        $age = $this->calculateAge($data['user']->date_of_birth);
+        $age = $this->calculateAge($data['user']->date_of_birth, $data['date_until']);
         $date = explode(',', Helper::convertIDDate($data['date_shdr']));
         $dateUntil = explode(',', Helper::convertIDDate($data['date_until']));
         $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
@@ -123,14 +123,15 @@ class ShdrsController extends Controller
         $dompdf->setOptions($options);
         $dompdf->loadHtml(view('shdr', compact('data', 'age', 'date', 'dateUntil', 'shepherd')));
         $dompdf->render();
-        return $dompdf->stream('document.pdf');
+        return $dompdf->stream('document.pdf', ['Attachment' => 1]);
     }
+
 
     public function test()
     {
 
-        $data = ($this->show(203))->additional(['success' => true]);
-        $age = $this->calculateAge($data['user']->date_of_birth);
+        $data = ($this->show(202))->additional(['success' => true]);
+        $age = $this->calculateAge($data['user']->date_of_birth, $data['date_until']);
         $date = explode(',', Helper::convertIDDate($data['date_shdr']));
         $dateUntil = explode(',', Helper::convertIDDate($data['date_until']));
         $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
@@ -138,9 +139,9 @@ class ShdrsController extends Controller
         return view('shdr', compact('data', 'age', 'date', 'dateUntil', 'shepherd'));
     }
 
-    public function calculateAge($birthdate) {
+    public function calculateAge($birthdate, $date_shdr) {
         $birthDate = new DateTime($birthdate);
-        $today = new DateTime('today');
+        $today = new DateTime($date_shdr);
         $age = $today->diff($birthDate)->y;
         return $age;
     }

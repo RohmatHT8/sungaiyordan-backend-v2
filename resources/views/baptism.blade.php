@@ -8,19 +8,27 @@
     <title>Sertifikat Baptis</title>
     <style>
         .h1 {
-            font-style: italic;
-            font-size: 3rem;
+            font-size: 3.5rem;
+            font-weight: 700;
             margin-bottom: 0;
             text-align: center;
+            margin: 0px;
+            font-style: italic;
         }
         .a4 {
             width: 21cm;
-            height: 29.7cm;
+            /* height: 29.7cm; */
+            /* border: black solid 1px; */
+            /* display: flex;
+            justify-content: center;
+            align-items: center; */
         }
+        
         .a5 {
             width: 14cm;
-            height: 20cm;
-            margin: 120px 200px;
+            /* height: 20cm; */
+            margin: 220px 2.5cm 0px;
+            /* border: black solid 1px; */
             /* padding: 100px 70px; */
             /* text-align: center; */
         }
@@ -30,6 +38,7 @@
         .no {
             font-size: larger;
             text-align: center;
+            margin: 2px 0px 0px;
         }
         .item {
             font-size: large;
@@ -89,12 +98,11 @@
         .garis-7 {
             width: 60%;
             position: absolute;
-            top: 0px;
+            top: 20px;
             left: 210px;
             text-align: center;
         }
         .garis-7 .p {
-            margin:0px;
             width: 100%;
         }
         .garis-9 {
@@ -128,7 +136,7 @@
             height: 100px;
             border: black solid 1.5px;
             position: absolute;
-            top: 18px;
+            top: 38px;
             left: 50px;
             font-size: small;
             text-align: center;
@@ -141,9 +149,11 @@
         .form-1 {
             position: relative;
             text-align: start !important;
+            margin-top: 50px;
         }
         .form p {
             text-align: start !important;
+            margin: 5px auto; 
         }
         .dalam {
             text-align: center;
