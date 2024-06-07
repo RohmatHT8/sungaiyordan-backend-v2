@@ -15,6 +15,10 @@ use App\Validators\ShdrValidator;
  */
 class ShdrRepositoryEloquent extends BaseRepository implements ShdrRepository
 {
+    protected $fieldSearchable = [
+        'no' => 'like',
+        'user.name' => 'like'
+    ];
     /**
      * Specify Model class name
      *

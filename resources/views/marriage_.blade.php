@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sertifikat Nikah</title>
+    <title>Sertifikat Peneguhan Nikah</title>
     <style>
         .a4 {
             width: 21cm;
@@ -26,7 +26,7 @@
         }
 
         .h1 {
-            font-size: 3.5rem;
+            font-size: 2.3rem;
             font-weight: 700;
             margin-bottom: 0;
             text-align: center;
@@ -135,7 +135,7 @@
 <body>
     <div class="a4">
         <div class="a5">
-            <p class="h1">SURAT NIKAH</p>
+            <p class="h1">SURAT PENEGUHAN NIKAH</p>
             <p class="no"><b>No. <span class="under">{{ $data['no'] }}</span></b></p>
             <p class="ayat">Hai isteri-isteri, tunduklah kepada suamimu, sebagaimana seharusnya di dalam Tuhan. Hai suami-suami, kasihilah isterimu dan janganlah berlaku kasar terhadap dia (Kol. 3:18-19)</p>
             <p class="item">Pada hari <u>{{ $cd[0] }}</u> tanggal <u>{{$cd[1]}}</u></p>

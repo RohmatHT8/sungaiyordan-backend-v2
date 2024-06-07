@@ -16,6 +16,9 @@ use App\Util\Helper;
 use App\Util\TransactionLogControllerTrait;
 use App\Validators\ConfirmationOfMarriageValidator;
 use Illuminate\Support\Facades\DB;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use App\Entities\User;
 
 /**
  * Class ConfirmationOfMarriagesController.
@@ -102,5 +105,55 @@ class ConfirmationOfMarriagesController extends Controller
                 'message' => $e->getMessageBag()
             ]);
         }
+    }
+    public function generatePdf($id)
+    {
+        $data = ($this->show($id))->additional(['success' => true]);
+        $cd = explode(',', Helper::convertIDDate($data['date']));
+        $groomName = User::where('id', $data['groom'])->pluck('name')[0];
+        $groomPOB = User::where('id', $data['groom'])->pluck('place_of_birth')[0];
+        $groomDOB = explode(',', Helper::convertIDDate(User::where('id', $data['groom'])->pluck('date_of_birth')[0]));
+        $groomFather = User::where('id', $data['groom'])->pluck('father')[0];
+        $groomMother = User::where('id', $data['groom'])->pluck('mother')[0];
+
+        $brideName = User::where('id', $data['bride'])->pluck('name')[0];
+        $bridePOB = User::where('id', $data['bride'])->pluck('place_of_birth')[0];
+        $brideDOB = explode(',', Helper::convertIDDate(User::where('id', $data['bride'])->pluck('date_of_birth')[0]));
+        $brideFather = User::where('id', $data['bride'])->pluck('father')[0];
+        $brideMother = User::where('id', $data['bride'])->pluck('mother')[0];
+        
+        $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
+
+        $dompdf = new Dompdf();
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $dompdf->setOptions($options);
+        $dompdf->loadHtml(view('marriage_', compact('data', 'cd', 'groomName', 'groomPOB', 'groomDOB', 'groomFather', 'groomMother', 'shepherd', 'brideName', 'bridePOB', 'brideDOB', 'brideFather', 'brideMother')));
+        $dompdf->render();
+        return $dompdf->stream('document.pdf');
+    }
+
+    public function test()
+    {
+        $data = ($this->show(1))->additional(['success' => true]);
+        $cd = explode(',', Helper::convertIDDate($data['date']));
+        $groomName = User::where('id', $data['groom'])->pluck('name')[0];
+        $groomPOB = User::where('id', $data['groom'])->pluck('place_of_birth')[0];
+        $groomDOB = explode(',', Helper::convertIDDate(User::where('id', $data['groom'])->pluck('date_of_birth')[0]));
+        $groomFather = User::where('id', $data['groom'])->pluck('father')[0];
+        $groomMother = User::where('id', $data['groom'])->pluck('mother')[0];
+
+        $brideName = User::where('id', $data['bride'])->pluck('name')[0];
+        $bridePOB = User::where('id', $data['bride'])->pluck('place_of_birth')[0];
+        $brideDOB = explode(',', Helper::convertIDDate(User::where('id', $data['bride'])->pluck('date_of_birth')[0]));
+        $brideFather = User::where('id', $data['bride'])->pluck('father')[0];
+        $brideMother = User::where('id', $data['bride'])->pluck('mother')[0];
+        
+        $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
+
+        // Log::info(json_decode(json_encode($groomName),true));
+        // Log::info(json_decode(json_encode($data),true));
+        return view('marriage_', compact('data', 'cd', 'groomName', 'groomPOB', 'groomDOB', 'groomFather', 'groomMother', 'shepherd', 'brideName', 'bridePOB', 'brideDOB', 'brideFather', 'brideMother'));
     }
 }

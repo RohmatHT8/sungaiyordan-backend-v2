@@ -201,7 +201,7 @@
             </div>
         </div>
         <div class="form-1">
-            <p class="name">{{ $shepherd }}</p>
+            <p class="name">{{ $data['who_signed'] }}</p>
             <div class="garis-8"></div>
             <p>Gembala Jemaat</p>
         </div>

@@ -15,6 +15,10 @@ use App\Validators\BaptismValidator;
  */
 class BaptismRepositoryEloquent extends BaseRepository implements BaptismRepository
 {
+    protected $fieldSearchable = [
+        'no' => 'like',
+        'user.name' => 'like'
+    ];
     /**
      * Specify Model class name
      *

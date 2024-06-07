@@ -16,7 +16,10 @@ use App\Repositories\ChildSubmissionRepository;
 use App\Util\Helper;
 use App\Util\TransactionLogControllerTrait;
 use App\Validators\ChildSubmissionValidator;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class ChildSubmissionsController.
@@ -102,13 +105,31 @@ class ChildSubmissionsController extends Controller
         }
     }
 
-    public function test()
+    public function generatePdf($id)
     {
-        $data = ($this->show(236))->additional(['success' => true]);
+        Log::info('dapetnih');
+        $data = ($this->show($id))->additional(['success' => true]);
         $cd = explode(',', Helper::convertIDDate($data['date']));
         $db = explode(',', Helper::convertIDDate($data['user']->date_of_birth));
-        $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
+    
+        $dompdf = new Dompdf();
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $dompdf->setOptions($options);
+        $dompdf->loadHtml(view('childSubmission', compact('data', 'cd', 'db')));
+        $dompdf->render();
+        return $dompdf->stream('document.pdf');
+    }
 
-        return view('childSubmission', compact('data'));
+    public function test()
+    {
+        $data = ($this->show(1))->additional(['success' => true]);
+        Log::info(json_decode(json_encode($data), true));
+        $cd = explode(',', Helper::convertIDDate($data['date']));
+        $db = explode(',', Helper::convertIDDate($data['user']->date_of_birth));
+        // $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
+
+        return view('childSubmission', compact('data', 'cd', 'db'));
     }
 }

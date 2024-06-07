@@ -15,6 +15,11 @@ use App\Validators\MarriageCertificateValidator;
  */
 class MarriageCertificateRepositoryEloquent extends BaseRepository implements MarriageCertificateRepository
 {
+    protected $fieldSearchable = [
+        'no' => 'like',
+        'grooms.name' => 'like',
+        'brides.name' => 'like'
+    ];
     /**
      * Specify Model class name
      *

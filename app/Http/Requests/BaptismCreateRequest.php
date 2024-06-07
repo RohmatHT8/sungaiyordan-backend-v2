@@ -29,6 +29,7 @@ class BaptismCreateRequest extends FormRequest
             'no' => 'nullable|unique:baptisms,no',
             'date' => 'required|date_format:Y-m-d|before_or_equal:today',
             'who_baptism' => 'required|string',
+            'who_signed' => 'required|string',
         ];
     }
 }

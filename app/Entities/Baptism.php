@@ -22,7 +22,7 @@ class Baptism extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = ['no', 'date', 'place_of_baptism_inside', 'place_of_baptism_outside', 'user_id', 'who_baptism'];
+    protected $fillable = ['no', 'date', 'place_of_baptism_inside', 'place_of_baptism_outside', 'user_id', 'who_baptism', 'who_signed'];
 
     protected $append = ['can_delete'];
 
@@ -35,15 +35,14 @@ class Baptism extends Model implements Transformable
     }
 
     public function getCanDeleteAttribute() {
-        return true;
+        return $this->defaultCanDeleteAttribute();
     }
 
     public function getCanPrintAttribute() {
-        return $this->defaultCanPrintAttribute();
+        return $this->defaultCanPrintAttribute() && $this->no !== '000000';
     }
 
-    public function getCanUpdateAttribute()
-    {
+    public function getCanUpdateAttribute(){
     return $this->defaultCanUpdateAttribute();
     }
 

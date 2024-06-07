@@ -123,6 +123,7 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::post('childsubmission', 'ChildSubmissionsController@store')->middleware(['auth:api', 'can:childsubmission-create']);
     Route::put('childsubmission/{id}', 'ChildSubmissionsController@update')->middleware(['auth:api', 'can:childsubmission-update']);
     Route::delete('childsubmission/{id}', 'ChildSubmissionsController@destroy')->middleware(['auth:api', 'can:childsubmission-delete']);
+    Route::get('childsubmission/{id}/print', 'ChildSubmissionsController@generatePdf')->middleware(['auth:api', 'can:childsubmission-create']);
 
     Route::get('marriagecertificate', 'MarriageCertificatesController@index')->middleware(['auth:api', 'can:marriagecertificate-index']);
     Route::get('marriagecertificate/{id}', 'MarriageCertificatesController@show')->middleware(['auth:api', 'can:marriagecertificate-read']);
@@ -130,12 +131,13 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::put('marriagecertificate/{id}', 'MarriageCertificatesController@update')->middleware(['auth:api', 'can:marriagecertificate-update']);
     Route::delete('marriagecertificate/{id}', 'MarriageCertificatesController@destroy')->middleware(['auth:api', 'can:marriagecertificate-delete']);
     Route::get('marriage/{id}/print', 'MarriageCertificatesController@generatePdf')->middleware(['auth:api', 'can:marriagecertificate-create']);
-
+    
     Route::get('confirmationofmarriage', 'ConfirmationOfMarriagesController@index')->middleware(['auth:api', 'can:confirmationofmarriage-index']);
     Route::get('confirmationofmarriage/{id}', 'ConfirmationOfMarriagesController@show')->middleware(['auth:api', 'can:confirmationofmarriage-read']);
     Route::post('confirmationofmarriage', 'ConfirmationOfMarriagesController@store')->middleware(['auth:api', 'can:confirmationofmarriage-create']);
     Route::put('confirmationofmarriage/{id}', 'ConfirmationOfMarriagesController@update')->middleware(['auth:api', 'can:confirmationofmarriage-update']);
     Route::delete('confirmationofmarriage/{id}', 'ConfirmationOfMarriagesController@destroy')->middleware(['auth:api', 'can:confirmationofmarriage-delete']);
+    Route::get('confirmationofmarriage/{id}/print', 'ConfirmationOfMarriagesController@generatePdf')->middleware(['auth:api', 'can:confirmationofmarriage-create']);
 
     Route::get('familycard', 'FamilyCardsController@index')->middleware(['auth:api', 'can:familycard-index']);
     Route::get('familycard/{id}', 'FamilyCardsController@show')->middleware(['auth:api', 'can:familycard-read']);

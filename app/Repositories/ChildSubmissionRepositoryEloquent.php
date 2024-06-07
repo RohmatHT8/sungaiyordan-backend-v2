@@ -15,6 +15,10 @@ use App\Validators\ChildSubmissionValidator;
  */
 class ChildSubmissionRepositoryEloquent extends BaseRepository implements ChildSubmissionRepository
 {
+    protected $fieldSearchable = [
+        'no' => 'like',
+        'user.name' => 'like'
+    ];
     /**
      * Specify Model class name
      *
