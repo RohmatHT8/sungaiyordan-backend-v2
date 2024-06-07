@@ -17,7 +17,7 @@ class ConfirmationOfMarriage extends Model implements Transformable
 {
     use TransformableTrait, SoftDeletes, TransactionLogModelTrait;
 
-    protected $fillable = ['no','date','branch_id','branch_non_local','groom','bride','who_blessed', 'location'];
+    protected $fillable = ['no','date','branch_id','branch_non_local','groom','bride','who_blessed','who_signed', 'location'];
 
     
     public function grooms(){

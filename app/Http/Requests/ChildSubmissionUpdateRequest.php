@@ -29,6 +29,7 @@ class ChildSubmissionUpdateRequest extends FormRequest
             'no' => 'nullable|unique:child_submissions,no,'.$this->id,
             'date' => 'required|date_format:Y-m-d|before_or_equal:today',
             'who_blessed' => 'required|string',
+            'who_signed' => 'required|string',
         ];
     }
 }

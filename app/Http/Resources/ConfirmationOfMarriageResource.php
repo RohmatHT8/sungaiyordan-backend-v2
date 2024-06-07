@@ -20,6 +20,7 @@ class ConfirmationOfMarriageResource extends JsonResource
             'branch_non_local' => $this->branch_non_local,
             'date' => $this->date,
             'who_blessed' => $this->who_blessed,
+            'who_signed' => $this->who_signed,
             'groom' => new UserSertificateSelect($this->whenLoaded('grooms')),
             'bride' => new UserSertificateSelect($this->whenLoaded('brides')),
             'location' => $this->location,

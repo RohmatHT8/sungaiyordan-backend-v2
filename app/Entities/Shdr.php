@@ -29,12 +29,12 @@ class Shdr extends Model implements Transformable
         return $this->belongsTo('App\Entities\Branch','place_of_shdr');
     }
 
-    public function getCanDeleteAttribute() {
-        return true;
+    public function getCanPrintAttribute() {
+        return $this->defaultCanPrintAttribute() && $this->no !== '000000';
     }
 
-    public function getCanPrintAttribute() {
-        return $this->defaultCanPrintAttribute();
+    public function getCanDeleteAttribute() {
+        return true;
     }
 
 }

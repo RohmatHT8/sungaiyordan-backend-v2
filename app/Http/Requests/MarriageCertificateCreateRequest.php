@@ -33,6 +33,7 @@ class MarriageCertificateCreateRequest extends FormRequest
             'no' => 'nullable|unique:marriage_certificates,no',
             'date' => 'required|date_format:Y-m-d|before_or_equal:today',
             'who_blessed' => 'required|string',
+            'who_signed' => 'required|string',
             'location' => 'required|string',
         ];
     }

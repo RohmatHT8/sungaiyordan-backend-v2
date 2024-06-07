@@ -142,7 +142,7 @@
                             </td>
                             <td style="width:10%"></td>
                             <td style="width:50%; text-align:center; vertical-align: bottom;">
-                                <span>Test</span>
+                                <span>{{ $data['who_signed'] }}</span>
                                 <hr />
                             </td>
                         </tr>

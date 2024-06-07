@@ -17,8 +17,9 @@ class MarriageCertificate extends Model implements Transformable
 {
     use TransformableTrait, SoftDeletes, TransactionLogModelTrait;
 
-    protected $fillable = ['no','date','branch_id','branch_non_local','groom','bride','who_blessed', 'location'];
+    protected $fillable = ['no','date','branch_id','branch_non_local','groom','bride','who_blessed', 'who_signed', 'location'];
 
+    protected $appends = ['can_print'];
     
     public function grooms(){
         return $this->belongsTo('App\Entities\User','groom');
@@ -31,5 +32,9 @@ class MarriageCertificate extends Model implements Transformable
     public function branch(){
         return $this->belongsTo('App\Entities\Branch','branch_id');
     }
+    public function getCanPrintAttribute() {
+        return $this->defaultCanPrintAttribute() && $this->no !== '000000';
+    }
+
 
 }

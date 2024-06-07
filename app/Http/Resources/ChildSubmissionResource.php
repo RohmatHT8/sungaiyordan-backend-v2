@@ -19,6 +19,7 @@ class ChildSubmissionResource extends JsonResource
             'no' => $this->no,
             'date' => $this->date,
             'who_blessed' => $this->who_blessed,
+            'who_signed' => $this->who_signed,
             'user' => new UserSertificateSelect($this->whenLoaded('user')),
             'can_delete' => true,
             'can_print' => true

@@ -17,7 +17,7 @@ class ChildSubmission extends Model implements Transformable
 {
     use TransformableTrait, SoftDeletes, TransactionLogModelTrait;
 
-    protected $fillable = ['no','date','branch_id','user_id','who_blessed'];
+    protected $fillable = ['no','date','branch_id','user_id','who_blessed', 'who_signed'];
 
     protected $append = ['can_delete'];
 

@@ -32,6 +32,7 @@ class ConfirmationOfMarriageUpdateRequest extends FormRequest
             'no' => 'nullable|unique:confirmation_of_marriages,no,'.$this->id,
             'date' => 'required|date_format:Y-m-d|before_or_equal:today',
             'who_blessed' => 'required|string',
+            'who_signed' => 'required|string',
             'location' => 'required|string',
         ];
     }
