@@ -266,9 +266,15 @@ class UsersController extends Controller
         $type = explode('/',$request->url());
         $type = $type[count($type)-1];
         $cloneRequest = json_decode($request->all()[0],true);
-
         $query = DB::table('users')
-        ->join('family_card_components', 'family_card_components.user_id','=','users.id')
+        ->leftJoin('family_card_components', 'family_card_components.user_id','=','users.id')
+        ->leftJoin('congregational_statuses', 'congregational_statuses.user_id','=','users.id')
+        ->leftJoin('baptisms', 'baptisms.user_id','=','users.id')
+        ->leftJoin('shdrs', 'shdrs.user_id','=','users.id')
+        ->leftJoin('marriage_certificates as mcs', function($join) {
+            $join->on('mcs.groom', '=', 'users.id')
+                 ->orOn('mcs.bride', '=', 'users.id');
+        })
         ->join('branches', 'branches.id','=','users.main_branch_id')
         ->whereIn('users.main_branch_id',$cloneRequest['branch_ids']);
 
