@@ -115,7 +115,7 @@ class ShdrsController extends Controller
         $date = explode(',', Helper::convertIDDate($data['date_shdr']));
         $dateUntil = explode(',', Helper::convertIDDate($data['date_until']));
         $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
-
+        
         $dompdf = new Dompdf();
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
