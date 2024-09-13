@@ -118,7 +118,7 @@
         }
 
         .garis-7 .p {
-            margin-left:-30px;
+            margin-left: -30px;
             /* width: 80%; */
         }
 
@@ -126,6 +126,13 @@
             width: 90%;
             height: 0.5px;
             margin: 0;
+            background-color: black;
+        }
+
+        .garis-10 {
+            width: 100%;
+            height: 0.3px;
+            margin: 0 0 7px 0;
             background-color: black;
         }
 
@@ -183,8 +190,9 @@
         .dalam {
             text-align: center;
         }
+
         hr {
-            background-color:black;
+            background-color: black;
         }
     </style>
 </head>
@@ -198,13 +206,12 @@
                 <tr>
                     <td width="8%">
                         No.
-                        <hr style="margin-top:0px; opacity:0;" />
+
                     </td>
                     <td width="92%" style="text-align:center; margin-bottom:0px;">
                         {{ $data['no']}}
-                        <hr style="margin-top:0px;" />
+                        <div class="garis-10"></div>
                     </td>
-
                 </tr>
             </table>
             <p class="ayat"><i>Dengan demikian kita telah dikuburkan bersama-sama dengan Dia oleh baptisan dalam kematian, supaya, sama seperti Kristus telah dibangkitkan dari antara orang mati oleh kemuliaan Bapa, demikian juga kita akan hidup dalam hidup yang baru. (Rm. 6:4)</i></p>
@@ -212,19 +219,19 @@
                 <tr>
                     <td width="14%">
                         Pada hari
-                        <hr style="margin-top:0px; opacity:0;" />
+
                     </td>
                     <td width="36%" style="text-align:center; margin-bottom:0px;">
                         {{ $cd[0] }}
-                        <hr style="margin-top:0px;" />
+                        <div class="garis-10"></div>
                     </td>
                     <td width="10%">
                         tanggal
-                        <hr style="margin-top:0px; opacity:0;" />
+
                     </td>
                     <td width="40%" style="text-align:center; margin-bottom:0px;">
                         {{$cd[1]}}
-                        <hr style="margin-top:0px;" />
+                        <div class="garis-10"></div>
                     </td>
                 </tr>
             </table>
@@ -234,68 +241,67 @@
                 <tr>
                     <td width="30%">
                         Nama
-                        <hr style="margin-top:0px; opacity:0;" />
+
                     </td>
                     <td width="1%">
                         :
-                        <hr style="margin-top:0px; opacity:0;" />
+
                     </td>
                     <td>
                         {{ $data['user']->name}}
-                        <hr style="margin-top:0px;" />
+                        <div class="garis-10"></div>
                     </td>
                 </tr>
                 <tr>
                     <td width="30%">
                         Tempat/tanggal
-                        <hr style="margin-top:0px; opacity:0;" />
+
                     </td>
                     <td width="1%">
                         :
-                        <hr style="margin-top:0px; opacity:0;" />
                     </td>
                     <td>
                         {{ $data['user']->place_of_birth }} / {{ $db[0] }} {{$db[1]}}
-                        <hr style="margin-top:0px;" />
+                        <div class="garis-10"></div>
                     </td>
                 </tr>
                 <tr>
                     <td width="30%">
                         Nama Ayah
-                        <hr style="margin-top:0px; opacity:0;" />
+
                     </td>
                     <td width="1%">
                         :
-                        <hr style="margin-top:0px; opacity:0;" />
+
                     </td>
                     <td>
                         {{ $data['user']->father }}
-                        <hr style="margin-top:0px;" />
+                        <div class="garis-10"></div>
                     </td>
                 </tr>
                 <tr>
                     <td width="30%">
                         Nama Ibu
-                        <hr style="margin-top:0px; opacity:0;" />
+
                     </td>
                     <td width="1%">
                         :
-                        <hr style="margin-top:0px; opacity:0;" />
+
                     </td>
                     <td>
                         {{ $data['user']->mother }}
-                        <hr style="margin-top:0px;" />
+                        <div class="garis-10"></div>
                     </td>
                 </tr>
                 <tr>
                     <td width="40%">
                         Baptisan ini dilakukan oleh
-                        <hr style="margin-top:0px; opacity:0;" />
+
                     </td>
                     <td></td>
                     <td width="60%">
                         {{ $data['who_baptism'] }}
-                        <hr style="margin-top:0px;" />
+                        <div class="garis-10"></div>
                     </td>
                 </tr>
             </table>
@@ -303,11 +309,11 @@
                 <tr>
                     <td width="4%">
                         di
-                        <hr style="margin-top:0px; opacity:0;" />
+
                     </td>
                     <td width="96%" colspan="2">
                         {{ $data['branch']->name }}
-                        <hr style="margin-top:0px;" />
+                        <div class="garis-10"></div>
                     </td>
                 </tr>
             </table>
