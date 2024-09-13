@@ -27,8 +27,8 @@ class ShdrUpdateRequest extends FormRequest
             // 'user_id' => ['required','exists:users,id', 'unique:shdrs,user_id,'.$this->id],
             'place_of_shdr' => 'required|exists:branches,id,deleted_at,NULL',
             'no' => 'nullable|unique:shdrs,no,'.$this->id,
-            'date_shdr' => 'required|date_format:Y-m-d|before_or_equal:today',
-            'date_until' => 'required|date_format:Y-m-d|before_or_equal:today',
+            'date_shdr' => 'required|date_format:Y-m-d',
+            'date_until' => 'required|date_format:Y-m-d',
             'who_signed' => 'required|string',
         ];
     }

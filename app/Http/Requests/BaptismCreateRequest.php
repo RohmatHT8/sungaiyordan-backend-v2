@@ -27,7 +27,7 @@ class BaptismCreateRequest extends FormRequest
             'user_id' => 'required|exists:users,id',
             'place_of_baptism_inside' => 'nullable|exists:branches,id,deleted_at,NULL',
             'no' => 'nullable|unique:baptisms,no',
-            'date' => 'required|date_format:Y-m-d|before_or_equal:today',
+            'date' => 'required|date_format:Y-m-d',
             'who_baptism' => 'required|string',
             'who_signed' => 'required|string',
         ];
