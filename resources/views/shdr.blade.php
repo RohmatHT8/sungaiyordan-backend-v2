@@ -15,11 +15,11 @@
             justify-content: center;
             align-items: center; */
         }
-        
+
         .a5 {
-            width: 14cm;
+            width: 12.5cm;
             /* height: 20cm; */
-            margin: 230px 2.5cm 0px;
+            margin: 220px 2.5cm 0px;
             /* border: black solid 1px; */
             /* padding: 100px 70px; */
             /* text-align: center; */
@@ -69,6 +69,13 @@
             text-align: center;
             margin: 20px;
         }
+
+        .garis-10 {
+            width: 100%;
+            height: 0.3px;
+            margin: 0 0 7px 0;
+            background-color: black;
+        }
     </style>
 </head>
 
@@ -78,55 +85,78 @@
             <div>
                 <p class="h1"><i>SERTIFIKAT</i></p>
                 <p class="h2">Seminar Hidup dalam Roh</p>
-                <p class="no"><b>No. <span class="under">{{ $data['no'] }}</span></b></p>
+                <table width="75%" style="margin:0px auto; font-weight:bold;" class="no">
+                    <tr>
+                        <td width="8%">
+                            No.
+                        </td>
+                        <td width="92%" style="text-align:center; margin-bottom:0px;">
+                            {{ $data['no']}}
+                            <div class="garis-10"></div>
+                        </td>
+                    </tr>
+                </table>
                 <p style="text-align: center; font-weight: 700;">Diberikan pada</p>
                 <table>
                     <tr>
-                        <td style="width:20%;">
+                        <td width="20%">
                             <div style="display: flex; justify-content: space-between;">
                                 <span>Nama</span>
-                                <span>:</span>
+
                             </div>
                         </td>
-                        <td>
+                        <td><span>:</span></td>
+                        <td width="78%">
                             <span>{{$data['user']->name}}</span>
-                            <hr />
+                            <div class="garis-10"></div>
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:20%">
+                        <td width="20%">
                             <div style="display: flex; justify-content: space-between;">
                                 <span>Umur</span>
-                                <span>:</span>
+
                             </div>
                         </td>
-                        <td>
+                        <td><span>:</span></td>
+                        <td width="78%">
                             <span>{{ $age }} Tahun</span>
-                            <hr />
+                            <div class="garis-10"></div>
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:20%">
-                            <div style="display: flex; justify-content: space-between;">
-                                <span>Alamat</span>
-                                <span>:</span>
-                            </div>
+                        <td width="20%" style="padding-top:0;">
+                            <span>Alamat</span>
                         </td>
-                        <td>
+                        <td style="padding-top:0;"><span class="margin-top:0px; padding-top:0px;">:</span></td>
+                        <td width="78%" style="padding-top:0;">
                             <span>{{$data['user']->address}}</span>
-                            <hr />
+                            <div class="garis-10"></div>
                         </td>
                     </tr>
                 </table>
                 <p style="text-align: center; font-weight: 700; margin:20px 0px 0px 0px;">Sebagai tanda telah mengikuti</p>
                 <p style="text-align: center; font-weight: 700; font-size:1.4rem;margin:5px">Seminar Hidup Dalam Roh</p>
-                <p class="item">Tanggal <u>{{$date[1]}}</u> s/d <u>{{$dateUntil[1]}}</u></p>
+                <table>
+                    <tr>
+                        <td width="10%">Tanggal</td>
+                        <td width="44%" style="text-align:center;">
+                            {{$date[1]}}
+                            <div class="garis-10"></div>
+                        </td>
+                        <td width="2%">s/d</td>
+                        <td width="44%" style="text-align:center;">
+                            {{$dateUntil[1]}}
+                            <div class="garis-10"></div>
+                        </td>
+                    </tr>
+                </table>
                 <table>
                     <tr>
                         <td style="width:50%"></td>
                         <td style="text-align:center">
                             <span>Jakarta, {{ $dateUntil[1] }}</span>
-                            <hr />
+                            <div class="garis-10"></div>
                         </td>
                     </tr>
                 </table>
@@ -135,12 +165,12 @@
                         <tr>
                             <td style="width:40%;text-align:center">
                                 <span>Hendaklah kamu penuh dengan Roh (Efesus 5:18b)</span>
-                                <hr />
+                                <div class="garis-10"></div>
                             </td>
                             <td style="width:10%"></td>
                             <td style="width:50%; text-align:center; vertical-align: bottom;">
                                 <span>{{$data['who_signed']}}</span>
-                                <hr />
+                                <div class="garis-10"></div>
                             </td>
                         </tr>
                     </table>
