@@ -185,4 +185,14 @@ class User extends Authenticatable implements Transformable
                 ->whereIn('branch_id',Auth::user()->branches()->pluck('branches.id')->all());
         })->pluck('ability')->all();
     }
+
+    public function baptism()
+    {
+        return $this->hasOne(Baptism::class, 'user_id');
+    }
+
+    public function shdr()
+    {
+        return $this->hasOne(Shdr::class, 'user_id');
+    }
 }

@@ -8,17 +8,19 @@
     ],
     "license": "MIT",
     "require": {
+        "barryvdh/laravel-dompdf": "^2.1",
+        "box/spout": "^3.3",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.0",
-        "laravel/tinker": "^2.5",
-        "barryvdh/laravel-dompdf": "^2.1",
-        "box/spout": "^3.3",
         "laravel/passport": "^10.0",
+        "laravel/tinker": "^2.5",
         "laravel/ui": "^3.0",
+        "mpdf/mpdf": "8.1",
         "prettus/l5-repository": "^2.9",
-        "rap2hpoutre/laravel-log-viewer": "^2.2.0"
+        "rap2hpoutre/laravel-log-viewer": "^2.2.0",
+        "tinybutstrong/opentbs": "^1.12"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

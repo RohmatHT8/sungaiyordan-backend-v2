@@ -144,6 +144,7 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::post('familycard', 'FamilyCardsController@store')->middleware(['auth:api', 'can:familycard-create']);
     Route::put('familycard/{id}', 'FamilyCardsController@update')->middleware(['auth:api', 'can:familycard-update']);
     Route::delete('familycard/{id}', 'FamilyCardsController@destroy')->middleware(['auth:api', 'can:familycard-delete']);
+    Route::get('familycard/{id}/print', 'FamilyCardsController@downloadDocument')->middleware(['auth:api', 'can:familycard-create']);
 
     Route::get('webuser', 'WebUsersController@index')->middleware(['auth:api', 'can:webuser-index']);
 
