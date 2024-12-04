@@ -78,21 +78,21 @@ class UsersController extends Controller
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         if ($request->from === 'shdr') {
             $this->repository->pushCriteria(new ShdrCriteria);
-        } else if($request->from === 'baptism') {
+        } else if ($request->from === 'baptism') {
             $this->repository->pushCriteria(new BaptismCriteria);
-        } else if($request->from === 'childsubmission') {
+        } else if ($request->from === 'childsubmission') {
             $this->repository->pushCriteria(new ChildSubmissionCriteria);
-        } else if($request->from === 'groom') {
+        } else if ($request->from === 'groom') {
             $this->repository->pushCriteria(new GroomCriteria);
-        } else if($request->from === 'bride') {
+        } else if ($request->from === 'bride') {
             $this->repository->pushCriteria(new BrideCriteria);
-        } else if($request->from === 'groomcom') {
+        } else if ($request->from === 'groomcom') {
             $this->repository->pushCriteria(new GroomcomCriteria);
-        } else if($request->from === 'bridecom') {
+        } else if ($request->from === 'bridecom') {
             $this->repository->pushCriteria(new BridecomCriteria);
-        } else if($request->from === 'familycard') {
+        } else if ($request->from === 'familycard') {
             $this->repository->pushCriteria(new FamilyCardCriteria);
-        }   
+        }
         return UserSertificateSelect::collection($this->repository->paginate($request->per_page));
     }
 
@@ -105,21 +105,21 @@ class UsersController extends Controller
             $password = $strPassword[2] . $strPassword[1] . $strPassword[0][2] . $strPassword[0][3];
             $request->merge(['password' => bcrypt($password)]);
 
-            if(empty($request->nik)){
+            if (empty($request->nik)) {
                 $request->merge(['nik' => $this->generateNo()]);
             }
-            
-            if(empty($request->email)){
-                $email = Str::lower(explode(' ',$request->name)[0]).$password.'@gbisy.com';
-                if(!empty($this->repository->where('email', $email)->count())){
-                    $email = Str::lower(explode(' ',$request->name)[0]).$password.($this->repository->where('email', $email)->count()+1).'@gbisy.com';
+
+            if (empty($request->email)) {
+                $email = Str::lower(explode(' ', $request->name)[0]) . $password . '@gbisy.com';
+                if (!empty($this->repository->where('email', $email)->count())) {
+                    $email = Str::lower(explode(' ', $request->name)[0]) . $password . ($this->repository->where('email', $email)->count() + 1) . '@gbisy.com';
                 };
                 $request->merge(['email' => $email]);
             }
 
             $user = $this->logStore($request, $this->repository);
             $this->createDetails($request, $user);
-            
+
             DB::commit();
             return ($this->show($user->id))->additional(['success' => true, 'password' => $password]);
         } catch (ValidatorException $e) {
@@ -133,7 +133,7 @@ class UsersController extends Controller
 
     public function show($id)
     {
-        $user = $this->repository->with(['roles', 'branches', 'mainBranch','congregationStatuses'])
+        $user = $this->repository->with(['roles', 'branches', 'mainBranch', 'congregationStatuses'])
             ->scopeQuery(function ($query) {
                 return $query->withTrashed();
             })->find($id);
@@ -248,35 +248,48 @@ class UsersController extends Controller
         }
     }
 
-    public function generateNo() {
+    public function generateNo()
+    {
         $no = 1000;
-        $lassNo = !empty($this->repository->withTrashed()->count()) ? max(json_decode(json_encode($this->repository->withTrashed()->pluck('nik'),true))) : 0;
-        if($lassNo >= 1000){
-            $no = $lassNo+1;
+        $lassNo = !empty($this->repository->withTrashed()->count()) ? max(json_decode(json_encode($this->repository->withTrashed()->pluck('nik'), true))) : 0;
+        if ($lassNo >= 1000) {
+            $no = $lassNo + 1;
         }
         return $no;
     }
 
-    public function barchart() {
+    public function barchart()
+    {
         return 'okk';
     }
 
-    public function jemaat(Request $request) {
+    public function jemaat(Request $request)
+    {
 
-        $type = explode('/',$request->url());
-        $type = $type[count($type)-1];
-        $cloneRequest = json_decode($request->all()[0],true);
+        $type = explode('/', $request->url());
+        $type = $type[count($type) - 1];
+        $cloneRequest = json_decode($request->all()[0], true);
         $query = DB::table('users')
-        ->leftJoin('family_card_components', 'family_card_components.user_id','=','users.id')
-        ->leftJoin('congregational_statuses', 'congregational_statuses.user_id','=','users.id')
-        ->leftJoin('baptisms', 'baptisms.user_id','=','users.id')
-        ->leftJoin('shdrs', 'shdrs.user_id','=','users.id')
-        ->leftJoin('marriage_certificates as mcs', function($join) {
-            $join->on('mcs.groom', '=', 'users.id')
-                 ->orOn('mcs.bride', '=', 'users.id');
+        ->leftJoin('family_card_components', 'family_card_components.user_id', '=', 'users.id')
+        ->leftJoin('family_cards', 'family_cards.id', '=', 'family_card_components.family_card_id')
+        ->leftJoin('congregational_statuses', 'congregational_statuses.user_id', '=', 'users.id')
+        ->leftJoin('branches', 'branches.id', '=', 'users.main_branch_id')
+        ->leftJoin('baptisms', function ($join) {
+            $join->on('baptisms.user_id', '=', 'users.id')
+                 ->whereNull('baptisms.deleted_at');
         })
-        ->join('branches', 'branches.id','=','users.main_branch_id')
-        ->whereIn('users.main_branch_id',$cloneRequest['branch_ids']);
+        ->leftJoin('shdrs', function ($join) {
+            $join->on('shdrs.user_id', '=', 'users.id')
+                 ->whereNull('shdrs.deleted_at');
+        })
+        ->leftJoin('marriage_certificates as mcs', function ($join) {
+            $join->on(function ($join) {
+                $join->on('mcs.groom', '=', 'users.id')
+                     ->orOn('mcs.bride', '=', 'users.id');
+            })
+            ->whereNull('mcs.deleted_at');
+        })
+        ->whereIn('users.main_branch_id', $cloneRequest['branch_ids']);
 
         return Helper::buildSql($query, $request);
     }
