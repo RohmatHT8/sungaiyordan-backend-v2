@@ -17,7 +17,7 @@ class FamilyCard extends Model implements Transformable
 {
     use TransformableTrait,SoftDeletes,TransactionLogModelTrait;
 
-    protected $fillable = ['branch_id','no','address'];
+    protected $fillable = ['branch_id','no','address','city', 'subdistrict', 'postal_code', 'rtrw'];
 
     protected $append = ['can_delete'];
 

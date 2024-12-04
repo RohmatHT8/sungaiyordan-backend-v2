@@ -18,6 +18,7 @@ use App\Repositories\FamilyCardRepository;
 use App\Util\Helper;
 use App\Util\TransactionLogControllerTrait;
 use App\Validators\FamilyCardValidator;
+use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\DB;
@@ -251,12 +252,23 @@ class FamilyCardsController extends Controller
         if (!file_exists(base_path('vendor/tinybutstrong/tinybutstrong/tbs_class.php'))) {
             return response()->json(['error' => 'TinyButStrong library not found'], 500);
         }
-
+        $shepherd = "";
+        if ($users['branch']['id'] == 1) {
+            $shepherd = 'Pdt. Emanuel Gatot, S.Th, M.Ag';
+        } else if ($users['branch']['id'] == 2) {
+            $shepherd = "Pdt. Marsudi Hardono";
+        } else if ($users['branch']['id'] == 3) {
+            $shepherd = "Pnt. Budiyanto";
+        }
         $data = [
             'id' => $users['id'],
             'branch' => $users['branch']['name'],
             'no' => $users['no'],
             'address' => $users['address'],
+            'city' => $users['city'],
+            'subdistrict' => $users['subdistrict'],
+            'postal_code' => $users['postal_code'],
+            'rtrw' => $users['rtrw'],
             'users' => [],
         ];
         foreach ($users['users'] as $user) {
@@ -283,12 +295,18 @@ class FamilyCardsController extends Controller
         $TBS->MergeField('namaKK', $data['users'][0]['name']);
         $TBS->MergeField('phoneKK', $data['users'][0]['phone_number']);
         $TBS->MergeField('branch', $data['branch']);
+        $TBS->MergeField('shepherd', $shepherd);
+        $TBS->MergeField('date_now', $this->getFormattedDate());
         $TBS->MergeField('address', $data['address']);
+        $TBS->MergeField('city', $data['city']);
+        $TBS->MergeField('subdistrict', $data['subdistrict']);
+        $TBS->MergeField('postal_code', $data['postal_code']);
+        $TBS->MergeField('rtrw', $data['rtrw']);
         if (!empty($marriageData)) {
             $TBS->MergeField('marriageDate', $marriageData->date);
             $TBS->MergeField('marriageLocation', $marriageData->location);
             $TBS->MergeField('marriageChurch', $marriageData->church);
-        }else{
+        } else {
             $TBS->MergeField('marriageDate', '-');
             $TBS->MergeField('marriageLocation', '-');
             $TBS->MergeField('marriageChurch', '-');
@@ -298,5 +316,13 @@ class FamilyCardsController extends Controller
         $outputFileName = 'Kartu_Keluarga_' . $data['no'] . '.docx';
         $TBS->Show(OPENTBS_DOWNLOAD, $outputFileName);
         return response()->json(['message' => 'Print Success'], 200);
+    }
+
+    public function getFormattedDate()
+    {
+        Carbon::setLocale('id');
+        $dateNow = Carbon::now();
+        $formattedDate = $dateNow->translatedFormat('d-F-Y');
+        return $formattedDate;
     }
 }

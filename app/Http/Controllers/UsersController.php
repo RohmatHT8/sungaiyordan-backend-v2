@@ -101,7 +101,7 @@ class UsersController extends Controller
         try {
             DB::beginTransaction();
             $strPassword = explode('-', $request->date_of_birth);
-            // dd/mm/yy
+            //dd/mm/yy
             $password = $strPassword[2] . $strPassword[1] . $strPassword[0][2] . $strPassword[0][3];
             $request->merge(['password' => bcrypt($password)]);
 
