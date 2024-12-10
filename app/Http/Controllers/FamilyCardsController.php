@@ -272,7 +272,24 @@ class FamilyCardsController extends Controller
             'users' => [],
         ];
         foreach ($users['users'] as $user) {
-            array_push($data['users'], [...$user['details'], 'status' => $user['status']]);
+            $details = $user['details'];
+
+            // Customisasi date_shdr
+            if (!empty($details['date_shdr'])) {
+                $details['date_shdr'] = $this->getFormattedDate($details['date_shdr']);
+            } else {
+                $details['date_shdr'] = 'Belum SHDR'; // Nilai default jika NULL
+            }
+
+            // Customisasi baptism_date
+            if (!empty($details['baptism_date'])) {
+                $details['baptism_date'] = $this->getFormattedDate($details['baptism_date']); // Contoh format baru
+            } else {
+                $details['baptism_date'] = 'Belum Dibaptis'; // Nilai default jika NULL
+            }
+            array_push($data['users'], array_merge($details, [
+                'status' => $user['status'],
+            ]));
         };
 
         include_once base_path('vendor/tinybutstrong/tinybutstrong/tbs_class.php');
