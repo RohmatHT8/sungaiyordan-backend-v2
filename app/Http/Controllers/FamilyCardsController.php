@@ -274,18 +274,19 @@ class FamilyCardsController extends Controller
         foreach ($users['users'] as $user) {
             $details = $user['details'];
 
+            $details['date_of_birth'] = $this->getFormattedDate($details['date_of_birth'], true);
             // Customisasi date_shdr
             if (!empty($details['date_shdr'])) {
-                $details['date_shdr'] = $this->getFormattedDate($details['date_shdr']);
+                $details['date_shdr'] = $this->getFormattedDate($details['date_shdr'], true);
             } else {
-                $details['date_shdr'] = 'Belum SHDR'; // Nilai default jika NULL
+                $details['date_shdr'] = '-'; // Nilai default jika NULL
             }
 
             // Customisasi baptism_date
             if (!empty($details['baptism_date'])) {
-                $details['baptism_date'] = $this->getFormattedDate($details['baptism_date']); // Contoh format baru
+                $details['baptism_date'] = $this->getFormattedDate($details['baptism_date'], true); // Contoh format baru
             } else {
-                $details['baptism_date'] = 'Belum Dibaptis'; // Nilai default jika NULL
+                $details['baptism_date'] = '-'; // Nilai default jika NULL
             }
             array_push($data['users'], array_merge($details, [
                 'status' => $user['status'],
@@ -335,13 +336,14 @@ class FamilyCardsController extends Controller
         return response()->json(['message' => 'Print Success'], 200);
     }
 
-    public function getFormattedDate($date = null)
+    public function getFormattedDate($date = null, $sortM = null)
     {
-        Carbon::setLocale('id');
+        setlocale(LC_TIME, 'id_ID.UTF-8'); // Pastikan locale diset ke Indonesia
+        Carbon::setLocale('id'); // Carbon menggunakan bahasa Indonesia
         // Gunakan tanggal saat ini jika tidak ada parameter yang diberikan
         $dateToFormat = $date ? Carbon::parse($date) : Carbon::now();
         // Format tanggal
-        $formattedDate = $dateToFormat->translatedFormat('d-F-Y');
+        $formattedDate = $sortM ? $dateToFormat->format('d-M-Y') : $dateToFormat->translatedFormat('d-F-Y');
         return $formattedDate;
     }
 }
