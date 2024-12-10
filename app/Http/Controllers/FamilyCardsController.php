@@ -343,7 +343,7 @@ class FamilyCardsController extends Controller
         // Gunakan tanggal saat ini jika tidak ada parameter yang diberikan
         $dateToFormat = $date ? Carbon::parse($date) : Carbon::now();
         // Format tanggal
-        $formattedDate = $sortM ? $dateToFormat->format('d-M-Y') : $dateToFormat->translatedFormat('d-F-Y');
+        $formattedDate = $sortM ? $dateToFormat->translatedFormat('d-M-Y') : $dateToFormat->translatedFormat('d-F-Y');
         return $formattedDate;
     }
 }
