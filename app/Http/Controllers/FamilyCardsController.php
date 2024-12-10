@@ -303,7 +303,7 @@ class FamilyCardsController extends Controller
         $TBS->MergeField('postal_code', $data['postal_code']);
         $TBS->MergeField('rtrw', $data['rtrw']);
         if (!empty($marriageData)) {
-            $TBS->MergeField('marriageDate', $marriageData->date);
+            $TBS->MergeField('marriageDate', $this->getFormattedDate($marriageData->date));
             $TBS->MergeField('marriageLocation', $marriageData->location);
             $TBS->MergeField('marriageChurch', $marriageData->church);
         } else {
@@ -318,11 +318,13 @@ class FamilyCardsController extends Controller
         return response()->json(['message' => 'Print Success'], 200);
     }
 
-    public function getFormattedDate()
+    public function getFormattedDate($date = null)
     {
         Carbon::setLocale('id');
-        $dateNow = Carbon::now();
-        $formattedDate = $dateNow->translatedFormat('d-F-Y');
+        // Gunakan tanggal saat ini jika tidak ada parameter yang diberikan
+        $dateToFormat = $date ? Carbon::parse($date) : Carbon::now();
+        // Format tanggal
+        $formattedDate = $dateToFormat->translatedFormat('d-F-Y');
         return $formattedDate;
     }
 }

@@ -16,11 +16,13 @@ class BranchCriteria implements CriteriaInterface
     protected $branchId;
     protected $specialClass;
     protected $foreignKey;
+    protected $shdr;
 
-    public function __construct($branchId=null,$specialClass=null,$foreignKey=null){
+    public function __construct($branchId=null,$specialClass=null,$foreignKey=null,$shdr=null){
         $this->branchId = $branchId;
         $this->specialClass = $specialClass;
         $this->foreignKey = $foreignKey;
+        $this->shdr = $shdr;
     }
 
     /**
@@ -53,8 +55,8 @@ class BranchCriteria implements CriteriaInterface
                     $q->where('branches.id',$this->branchId);
                 }
             });
-        } else {
-            $model = $model->whereIn($model->getModel()->getTable().'.branch_id',Auth::user()->branches()->pluck('branches.id')->all());
+        } else if($this->shdr) {
+            $model = $model->whereIn($model->getModel()->getTable().'.place_of_shdr',Auth::user()->branches()->pluck('branches.id')->all());
             if(!empty($this->branchId)){
                 $model = $model->where($model->getModel()->getTable().'.branch_id',$this->branchId);
             }

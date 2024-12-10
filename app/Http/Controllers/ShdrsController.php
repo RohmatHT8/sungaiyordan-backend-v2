@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Criteria\BranchCriteria;
 use App\Entities\User;
 use Illuminate\Http\Request;
 
@@ -42,6 +43,7 @@ class ShdrsController extends Controller
     public function index(Request $request)
     {
         $this->repository->pushCriteria(app('App\Criteria\OrderCriteria'));
+        $this->repository->pushCriteria(new BranchCriteria(null,null,null,true));
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         return new ShdrCollection($this->repository->paginate($request->per_page));
     }
