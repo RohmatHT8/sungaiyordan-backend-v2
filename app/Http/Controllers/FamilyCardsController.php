@@ -147,7 +147,6 @@ class FamilyCardsController extends Controller
 
     public function generatePdf($id)
     {
-        Log::info('masuk');
         $users = ($this->show($id))->additional(['success' => true]);
 
         $data = $this->mergeUserDataWithEloquent(json_decode(json_encode($users), true));
@@ -168,8 +167,6 @@ class FamilyCardsController extends Controller
         $dompdf->setPaper('legal', 'landscape');
         $dompdf->loadHtml(view('kk', compact('data', 'marriageData')));
         $dompdf->render();
-
-        Log::info(json_decode(json_encode($dompdf), true));
 
         return $dompdf->stream('kk.pdf');
     }

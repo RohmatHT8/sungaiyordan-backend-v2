@@ -17,9 +17,9 @@
         }
 
         .a5 {
-            width: 12.5cm;
+            width: 16cm;
             /* height: 20cm; */
-            margin: 220px 2.5cm 0px;
+            margin: 220px auto;
             /* border: black solid 1px; */
             /* padding: 100px 70px; */
             /* text-align: center; */
@@ -174,7 +174,7 @@
                             </td>
                         </tr>
                     </table>
-                    <div style="position: absolute; right:0; width:260px; text-align:center; top:50px">
+                    <div style="position: absolute; right:0; width:260px; text-align:center; top:55px">
                         <p style="font-size: 0.8rem; margin:0px;"><b>Gembala Jemaat</b></p>
                     </div>
                 </div>

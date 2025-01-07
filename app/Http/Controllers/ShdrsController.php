@@ -19,6 +19,7 @@ use App\Util\TransactionLogControllerTrait;
 use App\Validators\ShdrValidator;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Barryvdh\DomPDF\PDF;
+use clsTinyButStrong;
 use DateTime;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -43,7 +44,7 @@ class ShdrsController extends Controller
     public function index(Request $request)
     {
         $this->repository->pushCriteria(app('App\Criteria\OrderCriteria'));
-        $this->repository->pushCriteria(new BranchCriteria(null,null,null,true));
+        $this->repository->pushCriteria(new BranchCriteria(null, null, null, true));
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         return new ShdrCollection($this->repository->paginate($request->per_page));
     }
@@ -137,11 +138,11 @@ class ShdrsController extends Controller
         $date = explode(',', Helper::convertIDDate($data['date_shdr']));
         $dateUntil = explode(',', Helper::convertIDDate($data['date_until']));
         $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
-        Log::info(json_decode(json_encode($data),true));
         return view('shdr', compact('data', 'age', 'date', 'dateUntil', 'shepherd'));
     }
 
-    public function calculateAge($birthdate, $date_shdr) {
+    public function calculateAge($birthdate, $date_shdr)
+    {
         $birthDate = new DateTime($birthdate);
         $today = new DateTime($date_shdr);
         $age = $today->diff($birthDate)->y;
