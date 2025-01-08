@@ -109,7 +109,7 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::post('shdr', 'ShdrsController@store')->middleware(['auth:api', 'can:shdr-create']);
     Route::put('shdr/{id}', 'ShdrsController@update')->middleware(['auth:api', 'can:shdr-update']);
     Route::delete('shdr/{id}', 'ShdrsController@destroy')->middleware(['auth:api', 'can:shdr-delete']);
-    Route::get('shdr/{id}/print', 'ShdrsController@generatePdf')->middleware(['auth:api', 'can:shdr-read']);
+    Route::get('shdr/{id}/print', 'ShdrsController@downloadDocument')->middleware(['auth:api', 'can:shdr-read']);
 
     Route::get('baptism', 'BaptismsController@index')->middleware(['auth:api', 'can:baptism-index']);
     Route::get('baptism/{id}', 'BaptismsController@show')->middleware(['auth:api', 'can:baptism-read']);

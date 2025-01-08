@@ -24,6 +24,7 @@ Route::get('/confirmationmarriage', 'ConfirmationOfMarriagesController@test');
 Route::get('/child', 'ChildSubmissionsController@test');
 Route::get('/familycard', 'FamilyCardsController@test');
 Route::get('/familycard/{test}', 'FamilyCardsController@downloadDocument');
+Route::get('/shdr/{test}', 'ShdrsController@downloadDocument');
 
 //log-viewers
 Route::get('log-viewers', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);

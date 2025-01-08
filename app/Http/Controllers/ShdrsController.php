@@ -118,7 +118,7 @@ class ShdrsController extends Controller
         $date = explode(',', Helper::convertIDDate($data['date_shdr']));
         $dateUntil = explode(',', Helper::convertIDDate($data['date_until']));
         $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
-        
+
         $dompdf = new Dompdf();
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
@@ -129,6 +129,41 @@ class ShdrsController extends Controller
         return $dompdf->stream('document.pdf', ['Attachment' => 1]);
     }
 
+    public function downloadDocument($id)
+    {
+        $data = ($this->show($id))->additional(['success' => true]);
+        $age = $this->calculateAge($data['user']->date_of_birth, $data['date_until']);
+        $date = explode(',', Helper::convertIDDate($data['date_shdr']));
+        $dateUntil = explode(',', Helper::convertIDDate($data['date_until']));
+
+        include_once base_path('vendor/tinybutstrong/tinybutstrong/tbs_class.php');
+        include_once base_path('vendor/tinybutstrong/opentbs/tbs_plugin_opentbs.php');
+
+        // Path ke template
+        $templatePath = storage_path('templates/shdr.docx');
+
+        if (!file_exists($templatePath)) {
+            return response()->json(['error' => 'Template file not found'], 404);
+        }
+
+        // Inisialisasi TBS
+        // $TBS = new \clsTinyButStrong();
+        $TBS = new clsTinyButStrong();
+        $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
+        // Load template
+        $TBS->LoadTemplate($templatePath, OPENTBS_ALREADY_UTF8);
+        $TBS->MergeField('no', $data['no']);
+        $TBS->MergeField('name', $data['user']->name);
+        $TBS->MergeField('address', $data['user']->address);
+        $TBS->MergeField('age', $age);
+        $TBS->MergeField('date', $date);
+        $TBS->MergeField('dateUntil', $dateUntil);
+        $TBS->MergeField('shepherd', $data['who_signed']);
+        // Unduh file
+        $outputFileName = 'SHDR_' . $data['no'] . '.docx';
+        $TBS->Show(OPENTBS_DOWNLOAD, $outputFileName);
+        return response()->json(['message' => 'Print Success'], 200);
+    }
 
     public function test()
     {
