@@ -24,26 +24,30 @@ class Baptism extends Model implements Transformable
      */
     protected $fillable = ['no', 'date', 'place_of_baptism_inside', 'place_of_baptism_outside', 'user_id', 'who_baptism', 'who_signed'];
 
-    protected $append = ['can_delete'];
+    protected $append = ['can_delete', 'can_print'];
 
-    public function user(){
-        return $this->belongsTo('App\Entities\User','user_id');
-    }
-    
-    public function branch(){
-        return $this->belongsTo('App\Entities\Branch','place_of_baptism_inside');
+    public function user()
+    {
+        return $this->belongsTo('App\Entities\User', 'user_id');
     }
 
-    public function getCanDeleteAttribute() {
+    public function branch()
+    {
+        return $this->belongsTo('App\Entities\Branch', 'place_of_baptism_inside');
+    }
+
+    public function getCanDeleteAttribute()
+    {
         return $this->defaultCanDeleteAttribute();
     }
 
-    public function getCanPrintAttribute() {
+    public function getCanPrintAttribute()
+    {
         return $this->defaultCanPrintAttribute() && $this->no !== '000000';
     }
 
-    public function getCanUpdateAttribute(){
-    return $this->defaultCanUpdateAttribute();
+    public function getCanUpdateAttribute()
+    {
+        return $this->defaultCanUpdateAttribute();
     }
-
 }

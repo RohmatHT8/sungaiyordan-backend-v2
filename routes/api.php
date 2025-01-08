@@ -116,7 +116,7 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::post('baptism', 'BaptismsController@store')->middleware(['auth:api', 'can:baptism-create']);
     Route::put('baptism/{id}', 'BaptismsController@update')->middleware(['auth:api', 'can:baptism-update']);
     Route::delete('baptism/{id}', 'BaptismsController@destroy')->middleware(['auth:api', 'can:baptism-delete']);
-    Route::get('baptism/{id}/print', 'BaptismsController@generatePdf')->middleware(['auth:api', 'can:baptism-create']);
+    Route::get('baptism/{id}/print', 'BaptismsController@downloadDocument')->middleware(['auth:api', 'can:baptism-create']);
 
     Route::get('childsubmission', 'ChildSubmissionsController@index')->middleware(['auth:api', 'can:childsubmission-index']);
     Route::get('childsubmission/{id}', 'ChildSubmissionsController@show')->middleware(['auth:api', 'can:childsubmission-read']);

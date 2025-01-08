@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Branch;
 use App\Entities\User;
 use Illuminate\Http\Request;
 
@@ -13,6 +14,7 @@ use App\Http\Resources\BaptismResource;
 use App\Repositories\BaptismRepository;
 use App\Util\Helper;
 use App\Util\TransactionLogControllerTrait;
+use clsTinyButStrong;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\DB;
@@ -45,9 +47,9 @@ class BaptismsController extends Controller
     {
         try {
             DB::beginTransaction();
-            if(empty($request->no) && !empty($request->place_of_baptism_inside)){
-                $request->merge(['no' => Helper::generateNo('Baptism',$request->date,$request->place_of_baptism_inside)]);
-            }else if(empty($request->no)) {
+            if (empty($request->no) && !empty($request->place_of_baptism_inside)) {
+                $request->merge(['no' => Helper::generateNo('Baptism', $request->date, $request->place_of_baptism_inside)]);
+            } else if (empty($request->no)) {
                 $request->merge(['no' => '000000']);
             }
             $baptism = $this->logStore($request, $this->repository);
@@ -72,7 +74,7 @@ class BaptismsController extends Controller
     {
         try {
             DB::beginTransaction();
-            $baptism = $this->logUpdate($request,$this->repository,$id);
+            $baptism = $this->logUpdate($request, $this->repository, $id);
             DB::commit();
 
             return ($this->show($baptism->id))->additional(['success' => true]);
@@ -85,11 +87,11 @@ class BaptismsController extends Controller
         }
     }
 
-    public function destroy(Request $request,$id)
+    public function destroy(Request $request, $id)
     {
         try {
             DB::beginTransaction();
-            $baptism = $this->logDestroy($request,$this->repository,$id);
+            $baptism = $this->logDestroy($request, $this->repository, $id);
             DB::commit();
 
             return response()->json([
@@ -126,5 +128,43 @@ class BaptismsController extends Controller
         $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
 
         return view('baptism', compact('data', 'cd', 'db', 'shepherd'));
+    }
+    public function downloadDocument($id)
+    {
+        $data = ($this->show($id))->additional(['success' => true]);
+        $date = explode(',', Helper::convertIDDate($data['date']));
+        $dob = explode(',', Helper::convertIDDate($data['user']->date_of_birth))[1];
+        $placeOfBaptism = Branch::where('id', $data['place_of_baptism_inside'])->pluck('name')->first();
+
+        include_once base_path('vendor/tinybutstrong/tinybutstrong/tbs_class.php');
+        include_once base_path('vendor/tinybutstrong/opentbs/tbs_plugin_opentbs.php');
+
+        // Path ke template
+        $templatePath = storage_path('templates/baptis.docx');
+
+        if (!file_exists($templatePath)) {
+            return response()->json(['error' => 'Template file not found'], 404);
+        }
+
+        // Inisialisasi TBS
+        // $TBS = new \clsTinyButStrong();
+        $TBS = new clsTinyButStrong();
+        $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
+        // Load template
+        $TBS->LoadTemplate($templatePath, OPENTBS_ALREADY_UTF8);
+        $TBS->MergeField('no', $data['no']);
+        $TBS->MergeField('name', $data['user']->name);
+        $TBS->MergeField('date', $date);
+        $TBS->MergeField('placeOfBirth', $data['user']->place_of_birth);
+        $TBS->MergeField('dateOfBirth', $dob);
+        $TBS->MergeField('father', $data['user']->father);
+        $TBS->MergeField('mother', $data['user']->mother);
+        $TBS->MergeField('whoBaptism', $data['who_baptism']);
+        $TBS->MergeField('shepherd', $data['who_signed']);
+        $TBS->MergeField('placeOfBaptism', $placeOfBaptism);
+        // Unduh file
+        $outputFileName = 'SHDR_' . $data['no'] . '.docx';
+        $TBS->Show(OPENTBS_DOWNLOAD, $outputFileName);
+        return response()->json(['message' => 'Print Success'], 200);
     }
 }
