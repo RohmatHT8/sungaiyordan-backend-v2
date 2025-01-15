@@ -27,7 +27,7 @@ class ChildSubmissionCreateRequest extends FormRequest
             'user_id' => 'required|exists:users,id',
             'branch_id' => 'nullable|exists:branches,id,deleted_at,NULL',
             'no' => 'nullable|unique:child_submissions,no',
-            'date' => 'required|date_format:Y-m-d|before_or_equal:today',
+            'date' => 'required|date_format:Y-m-d',
             'who_blessed' => 'required|string',
             'who_signed' => 'required|string',
         ];

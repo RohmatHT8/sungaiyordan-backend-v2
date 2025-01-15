@@ -31,7 +31,7 @@ class FamilyCardUpdateRequest extends FormRequest
             'users' => ['required','array', new isDuplicateUser],
             'users.*.user_id' => 'required|exists:users,id',
             'users.*.status' => 'required|string',
-            'users.*.valid_until' => 'nullable|string|date_format:Y-m-d|before_or_equal:today',
+            'users.*.valid_until' => 'nullable|string|date_format:Y-m-d',
             'users.*.sequence' => 'required|distinct|integer',
         ];
     }

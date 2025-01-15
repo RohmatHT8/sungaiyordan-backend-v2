@@ -128,8 +128,6 @@ class ChildSubmissionsController extends Controller
         $date = explode(',', Helper::convertIDDate($data['date']));
         $dob = explode(',', Helper::convertIDDate($data['user']->date_of_birth))[1];
 
-        Log::info(json_decode(json_encode($data), true));
-
         include_once base_path('vendor/tinybutstrong/tinybutstrong/tbs_class.php');
         include_once base_path('vendor/tinybutstrong/opentbs/tbs_plugin_opentbs.php');
 

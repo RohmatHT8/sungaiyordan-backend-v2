@@ -33,17 +33,17 @@ class WebUserCreateRequest extends FormRequest
             'users.*.nik' => 'required',
             'users.*.place_of_birth' => 'required',
             'users.*.date_of_birth' => 'required|date_format:Y-m-d|before:today',
-            'users.*.join_date' => 'nullable|date_format:Y-m-d|before_or_equal:today',
+            'users.*.join_date' => 'nullable|date_format:Y-m-d',
             'users.*.gender' => 'required',
             'users.*.congregational_status' => 'required',
             'users.*.status_baptize' => 'required_if:users.*.congregational_status,==,Berjemaat',
-            'users.*.date_of_baptize' => 'nullable|date_format:Y-m-d|before_or_equal:today',
+            'users.*.date_of_baptize' => 'nullable|date_format:Y-m-d',
             'users.*.status_shdr' => 'required_if:users.*.congregational_status,==,Berjemaat',
-            'users.*.date_shdr' => 'nullable|date_format:Y-m-d|before_or_equal:today',
+            'users.*.date_shdr' => 'nullable|date_format:Y-m-d',
             'users.*.profession' => 'required',
             'users.*.email' => 'nullable',
             'users.*.marital_status' => 'required',
-            'users.*.wedding_date' => 'nullable|date_format:Y-m-d|before_or_equal:today',
+            'users.*.wedding_date' => 'nullable|date_format:Y-m-d',
             'users.*.family_member_status' => ['required', new NotDuplicateHOFAndWife(collect($this->users)->pluck('family_member_status'))]
         ];
     }

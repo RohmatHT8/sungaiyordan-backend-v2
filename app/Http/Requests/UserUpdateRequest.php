@@ -41,10 +41,10 @@ class UserUpdateRequest extends FormRequest
             'branch_ids' => 'required|array',
             'branch_ids.*' => 'required|distinct|exists:branches,id,deleted_at,NULL',
             'main_branch_id' => 'required|exists:branches,id,deleted_at,NULL',
-            'join_date' => 'required|date_format:Y-m-d|before_or_equal:today',
+            'join_date' => 'required|date_format:Y-m-d',
             'congregationalStatuses' => 'required|array',
             'congregationalStatuses.*.status' => 'required|string',
-            'congregationalStatuses.*.date' => 'nullable|date_format:Y-m-d|before_or_equal:today',
+            'congregationalStatuses.*.date' => 'nullable|date_format:Y-m-d',
             'congregationalStatuses.*.notes' => 'nullable|string',
         ];
     }
