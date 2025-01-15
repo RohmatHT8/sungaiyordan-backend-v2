@@ -15,6 +15,7 @@ use App\Http\Resources\MarriageCertificateResource;
 use App\Repositories\MarriageCertificateRepository;
 use App\Util\Helper;
 use App\Util\TransactionLogControllerTrait;
+use clsTinyButStrong;
 use Illuminate\Support\Facades\DB;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -47,9 +48,9 @@ class MarriageCertificatesController extends Controller
     {
         try {
             DB::beginTransaction();
-            if(empty($request->no) && !empty($request->branch_id)){
-                $request->merge(['no' => Helper::generateNo('MarriageCertificate',$request->date,$request->branch_id)]);
-            }else if(empty($request->no)) {
+            if (empty($request->no) && !empty($request->branch_id)) {
+                $request->merge(['no' => Helper::generateNo('MarriageCertificate', $request->date, $request->branch_id)]);
+            } else if (empty($request->no)) {
                 $request->merge(['no' => '000000']);
             }
             $mc = $this->logStore($request, $this->repository);
@@ -66,7 +67,7 @@ class MarriageCertificatesController extends Controller
 
     public function show($id)
     {
-        $mc = $this->repository->with(['grooms','brides','branch'])->find($id);
+        $mc = $this->repository->with(['grooms', 'brides', 'branch'])->find($id);
         return new MarriageCertificateResource($mc);
     }
 
@@ -74,7 +75,7 @@ class MarriageCertificatesController extends Controller
     {
         try {
             DB::beginTransaction();
-            $mc = $this->logUpdate($request,$this->repository,$id);
+            $mc = $this->logUpdate($request, $this->repository, $id);
             DB::commit();
 
             return ($this->show($mc->id))->additional(['success' => true]);
@@ -91,7 +92,7 @@ class MarriageCertificatesController extends Controller
     {
         try {
             DB::beginTransaction();
-            $mc = $this->logDestroy($request,$this->repository,$id);
+            $mc = $this->logDestroy($request, $this->repository, $id);
             DB::commit();
 
             return response()->json([
@@ -121,7 +122,7 @@ class MarriageCertificatesController extends Controller
         $brideDOB = explode(',', Helper::convertIDDate(User::where('id', $data['bride'])->pluck('date_of_birth')[0]));
         $brideFather = User::where('id', $data['bride'])->pluck('father')[0];
         $brideMother = User::where('id', $data['bride'])->pluck('mother')[0];
-        
+
         $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
 
         $dompdf = new Dompdf();
@@ -149,11 +150,58 @@ class MarriageCertificatesController extends Controller
         $brideDOB = explode(',', Helper::convertIDDate(User::where('id', $data['bride'])->pluck('date_of_birth')[0]));
         $brideFather = User::where('id', $data['bride'])->pluck('father')[0];
         $brideMother = User::where('id', $data['bride'])->pluck('mother')[0];
-        
+
         $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
 
-        Log::info(json_decode(json_encode($groomName),true));
-        Log::info(json_decode(json_encode($data),true));
+        Log::info(json_decode(json_encode($groomName), true));
+        Log::info(json_decode(json_encode($data), true));
         return view('marriage', compact('data', 'cd', 'groomName', 'groomPOB', 'groomDOB', 'groomFather', 'groomMother', 'shepherd', 'brideName', 'bridePOB', 'brideDOB', 'brideFather', 'brideMother'));
+    }
+
+    public function downloadDocument($id)
+    {
+        $data = $this->show($id)->additional(['success' => true]);
+        $date = explode(',', Helper::convertIDDate($data['date']));
+        $data = json_decode(json_encode($data), true);
+        $groomDOB = explode(',', Helper::convertIDDate($data['groom']['date_of_birth']))[1];
+        $brideDOB = explode(',', Helper::convertIDDate($data['bride']['date_of_birth']))[1];
+
+        include_once base_path('vendor/tinybutstrong/tinybutstrong/tbs_class.php');
+        include_once base_path('vendor/tinybutstrong/opentbs/tbs_plugin_opentbs.php');
+
+        // Path ke template
+        $templatePath = storage_path('templates/merriage.docx');
+
+        if (!file_exists($templatePath)) {
+            return response()->json(['error' => 'Template file not found'], 404);
+        }
+
+        // Inisialisasi TBS
+        // $TBS = new \clsTinyButStrong();
+        $TBS = new clsTinyButStrong();
+        $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
+        // Load template
+        $TBS->LoadTemplate($templatePath, OPENTBS_ALREADY_UTF8);
+        $TBS->MergeField('no', $data['no']);
+        $TBS->MergeField('date', $date);
+
+        $TBS->MergeField('groomName', explode(" - ", $data['groom']['name'])[1]);
+        $TBS->MergeField('groomFather', $data['groom']['father']);
+        $TBS->MergeField('groomMother', $data['groom']['mother']);
+        $TBS->MergeField('groomDateOfBirth', $groomDOB);
+        $TBS->MergeField('groomPlaceOfBirth', $data['groom']['place_of_birth']);
+
+        $TBS->MergeField('brideName', explode(" - ", $data['bride']['name'])[1]);
+        $TBS->MergeField('brideFather', $data['bride']['father']);
+        $TBS->MergeField('brideMother', $data['bride']['mother']);
+        $TBS->MergeField('brideDateOfBirth', $brideDOB);
+        $TBS->MergeField('bridePlaceOfBirth', $data['bride']['place_of_birth']);
+        
+        $TBS->MergeField('whoBlessed', $data['who_blessed']);
+        $TBS->MergeField('shepherd', $data['who_signed']);
+
+        $outputFileName = 'MARRIAGE_' . $data['no'] . '.docx';
+        $TBS->Show(OPENTBS_DOWNLOAD, $outputFileName);
+        return response()->json(['message' => 'Print Success'], 200);
     }
 }

@@ -16,6 +16,7 @@ use App\Repositories\ChildSubmissionRepository;
 use App\Util\Helper;
 use App\Util\TransactionLogControllerTrait;
 use App\Validators\ChildSubmissionValidator;
+use clsTinyButStrong;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\DB;
@@ -47,8 +48,8 @@ class ChildSubmissionsController extends Controller
     {
         try {
             DB::beginTransaction();
-            if(empty($request->no)){
-                $request->merge(['no' => Helper::generateNo('ChildSubmission',$request->date,$request->branch_id)]);
+            if (empty($request->no)) {
+                $request->merge(['no' => Helper::generateNo('ChildSubmission', $request->date, $request->branch_id)]);
             }
             $cs = $this->logStore($request, $this->repository);
             DB::commit();
@@ -72,7 +73,7 @@ class ChildSubmissionsController extends Controller
     {
         try {
             DB::beginTransaction();
-            $baptism = $this->logUpdate($request,$this->repository,$id);
+            $baptism = $this->logUpdate($request, $this->repository, $id);
             DB::commit();
 
             return ($this->show($baptism->id))->additional(['success' => true]);
@@ -85,12 +86,11 @@ class ChildSubmissionsController extends Controller
         }
     }
 
-
     public function destroy(Request $request, $id)
     {
         try {
             DB::beginTransaction();
-            $baptism = $this->logDestroy($request,$this->repository,$id);
+            $baptism = $this->logDestroy($request, $this->repository, $id);
             DB::commit();
 
             return response()->json([
@@ -111,7 +111,7 @@ class ChildSubmissionsController extends Controller
         $data = ($this->show($id))->additional(['success' => true]);
         $cd = explode(',', Helper::convertIDDate($data['date']));
         $db = explode(',', Helper::convertIDDate($data['user']->date_of_birth));
-    
+
         $dompdf = new Dompdf();
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
@@ -121,15 +121,42 @@ class ChildSubmissionsController extends Controller
         $dompdf->render();
         return $dompdf->stream('document.pdf');
     }
-
-    public function test()
+    
+    public function downloadDocument($id)
     {
-        $data = ($this->show(1))->additional(['success' => true]);
-        Log::info(json_decode(json_encode($data), true));
-        $cd = explode(',', Helper::convertIDDate($data['date']));
-        $db = explode(',', Helper::convertIDDate($data['user']->date_of_birth));
-        // $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
+        $data = ($this->show($id))->additional(['success' => true]);
+        $date = explode(',', Helper::convertIDDate($data['date']));
+        $dob = explode(',', Helper::convertIDDate($data['user']->date_of_birth))[1];
 
-        return view('childSubmission', compact('data', 'cd', 'db'));
+        Log::info(json_decode(json_encode($data), true));
+
+        include_once base_path('vendor/tinybutstrong/tinybutstrong/tbs_class.php');
+        include_once base_path('vendor/tinybutstrong/opentbs/tbs_plugin_opentbs.php');
+
+        // Path ke template
+        $templatePath = storage_path('templates/child_submission.docx');
+
+        if (!file_exists($templatePath)) {
+            return response()->json(['error' => 'Template file not found'], 404);
+        }
+
+        // Inisialisasi TBS
+        // $TBS = new \clsTinyButStrong();
+        $TBS = new clsTinyButStrong();
+        $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
+        // Load template
+        $TBS->LoadTemplate($templatePath, OPENTBS_ALREADY_UTF8);
+        $TBS->MergeField('no', $data['no']);
+        $TBS->MergeField('name', $data['user']->name);
+        $TBS->MergeField('date', $date);
+        $TBS->MergeField('dateOfBirth', $dob);
+        $TBS->MergeField('placeOfBirth', $data['user']->place_of_birth);
+        $TBS->MergeField('father', $data['user']->father);
+        $TBS->MergeField('mother', $data['user']->mother);
+        $TBS->MergeField('shepherd', $data['who_signed']);
+        // Unduh file
+        $outputFileName = 'SHDR_' . $data['no'] . '.docx';
+        $TBS->Show(OPENTBS_DOWNLOAD, $outputFileName);
+        return response()->json(['message' => 'Print Success'], 200);
     }
 }

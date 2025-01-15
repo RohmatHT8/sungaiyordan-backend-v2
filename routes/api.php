@@ -123,7 +123,7 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::post('childsubmission', 'ChildSubmissionsController@store')->middleware(['auth:api', 'can:childsubmission-create']);
     Route::put('childsubmission/{id}', 'ChildSubmissionsController@update')->middleware(['auth:api', 'can:childsubmission-update']);
     Route::delete('childsubmission/{id}', 'ChildSubmissionsController@destroy')->middleware(['auth:api', 'can:childsubmission-delete']);
-    Route::get('childsubmission/{id}/print', 'ChildSubmissionsController@generatePdf')->middleware(['auth:api', 'can:childsubmission-create']);
+    Route::get('childsubmission/{id}/print', 'ChildSubmissionsController@downloadDocument')->middleware(['auth:api', 'can:childsubmission-create']);
 
     Route::get('marriagecertificate', 'MarriageCertificatesController@index')->middleware(['auth:api', 'can:marriagecertificate-index']);
     Route::get('marriagecertificate/{id}', 'MarriageCertificatesController@show')->middleware(['auth:api', 'can:marriagecertificate-read']);

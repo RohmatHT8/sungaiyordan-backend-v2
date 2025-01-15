@@ -163,7 +163,7 @@ class BaptismsController extends Controller
         $TBS->MergeField('shepherd', $data['who_signed']);
         $TBS->MergeField('placeOfBaptism', $placeOfBaptism);
         // Unduh file
-        $outputFileName = 'SHDR_' . $data['no'] . '.docx';
+        $outputFileName = 'BAPTISM_' . $data['no'] . '.docx';
         $TBS->Show(OPENTBS_DOWNLOAD, $outputFileName);
         return response()->json(['message' => 'Print Success'], 200);
     }

@@ -30,7 +30,7 @@ class MarriageCertificateUpdateRequest extends FormRequest
             'branch_id' => 'nullable|exists:branches,id,deleted_at,NULL',
             'branch_non_local' => 'nullable',
             'no' => 'nullable|unique:marriage_certificates,no,'.$this->id,
-            'date' => 'required|date_format:Y-m-d|before_or_equal:today',
+            'date' => 'required|date_format:Y-m-d',
             'who_blessed' => 'required|string',
             'who_signed' => 'required|string',
             'location' => 'required|string',
