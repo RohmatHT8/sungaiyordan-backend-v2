@@ -244,6 +244,7 @@ class FamilyCardsController extends Controller
                 DB::raw('IFNULL(b.name, mc.branch_non_local) AS church')
             )
             ->where('groom', json_decode(json_encode($users), true)['users'][0]['user']['id'])
+            ->orWhere('bride', json_decode(json_encode($users), true)['users'][0]['user']['id'])
             ->first();
         // Pastikan file TinyButStrong dan plugin OpenTBS tersedia
         if (!file_exists(base_path('vendor/tinybutstrong/tinybutstrong/tbs_class.php'))) {
