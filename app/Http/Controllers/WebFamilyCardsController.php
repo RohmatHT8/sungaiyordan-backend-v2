@@ -34,7 +34,7 @@ class WebFamilyCardsController extends Controller
         $this->repository->pushCriteria(app('App\Criteria\OrderCriteria'));
         $this->repository->pushCriteria(new FamilyCardPerBranchCriteria);
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $this->repository->pushCriteria(new UserFamilyCardCriteria);
+        // $this->repository->pushCriteria(new UserFamilyCardCriteria);
         return new WebFamilyCardCollection($this->repository->paginate($request->per_page));
     }
 
