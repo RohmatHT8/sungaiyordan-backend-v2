@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Entities\MarriageCertificate;
 use App\Rules\IsGender;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -29,7 +30,14 @@ class MarriageCertificateUpdateRequest extends FormRequest
             'bride' => ['required', 'exists:users,id', new IsGender('Perempuan')],
             'branch_id' => 'nullable|exists:branches,id,deleted_at,NULL',
             'branch_non_local' => 'nullable',
-            'no' => 'nullable|unique:marriage_certificates,no,'.$this->id,
+            'no' => [
+                'nullable',
+                function ($attribute, $value, $fail) {
+                    if ($value !== '000000' && MarriageCertificate::where('no', $value)->where('id', '!=', $this->id)->exists()) {
+                        $fail('Nomor sudah digunakan.');
+                    }
+                },
+            ],
             'date' => 'required|date_format:Y-m-d',
             'who_blessed' => 'required|string',
             'who_signed' => 'required|string',
