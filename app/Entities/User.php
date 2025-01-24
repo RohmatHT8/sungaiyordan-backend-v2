@@ -25,7 +25,7 @@ class User extends Authenticatable implements Transformable
 
     protected $hidden = ['password', 'remember_token'];
 
-    protected $appends = ['role_id','permissions', 'can_update', 'can_delete', 'can_approve', 'can_print','widget_permissions','report_permissions'];
+    protected $appends = ['role_id','permissions', 'can_update', 'can_delete', 'can_print','widget_permissions','report_permissions'];
     protected $casts = ['email_verified_at' => 'datetime'];
 
     public function hasAuthority($abilities){
@@ -169,10 +169,6 @@ class User extends Authenticatable implements Transformable
 
     public function getCanUpdateAttribute(){
         return $this->defaultCanUpdateAttribute();
-    }
-
-    public function getCanApproveAttribute(){
-        return true;
     }
 
     public function getReportPermissionsAttribute(){
