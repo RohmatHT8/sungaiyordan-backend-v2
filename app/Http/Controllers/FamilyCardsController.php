@@ -256,7 +256,7 @@ class FamilyCardsController extends Controller
         } else if ($users['branch']['id'] == 2) {
             $shepherd = "Pdt. Marsudi Hardono";
         } else if ($users['branch']['id'] == 3) {
-            $shepherd = "Pnt. Budiyanto";
+            $shepherd = "Pdt. Ir. Budiyanto Soeryadi";
         }
         $data = [
             'id' => $users['id'],

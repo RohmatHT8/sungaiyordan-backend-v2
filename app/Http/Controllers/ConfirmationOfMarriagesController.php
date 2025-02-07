@@ -171,7 +171,7 @@ class ConfirmationOfMarriagesController extends Controller
         include_once base_path('vendor/tinybutstrong/opentbs/tbs_plugin_opentbs.php');
 
         // Path ke template
-        $templatePath = storage_path('templates/merriage.docx');
+        $templatePath = storage_path('templates/confirmation_merriage.docx');
 
         if (!file_exists($templatePath)) {
             return response()->json(['error' => 'Template file not found'], 404);
