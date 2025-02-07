@@ -137,7 +137,7 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::post('confirmationofmarriage', 'ConfirmationOfMarriagesController@store')->middleware(['auth:api', 'can:confirmationofmarriage-create']);
     Route::put('confirmationofmarriage/{id}', 'ConfirmationOfMarriagesController@update')->middleware(['auth:api', 'can:confirmationofmarriage-update']);
     Route::delete('confirmationofmarriage/{id}', 'ConfirmationOfMarriagesController@destroy')->middleware(['auth:api', 'can:confirmationofmarriage-delete']);
-    Route::get('confirmationofmarriage/{id}/print', 'ConfirmationOfMarriagesController@generatePdf')->middleware(['auth:api', 'can:confirmationofmarriage-create']);
+    Route::get('confirmationofmarriage/{id}/print', 'ConfirmationOfMarriagesController@downloadDocument')->middleware(['auth:api', 'can:confirmationofmarriage-create']);
 
     Route::get('familycard', 'FamilyCardsController@index')->middleware(['auth:api', 'can:familycard-index']);
     Route::get('familycard/{id}', 'FamilyCardsController@show')->middleware(['auth:api', 'can:familycard-read']);
