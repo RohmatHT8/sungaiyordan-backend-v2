@@ -246,6 +246,7 @@ class FamilyCardsController extends Controller
             ->where('groom', json_decode(json_encode($users), true)['users'][0]['user']['id'])
             ->orWhere('bride', json_decode(json_encode($users), true)['users'][0]['user']['id'])
             ->first();
+        Log::info(json_decode(json_encode($marriageData), true));
         if (empty($marriageData)) {
             $marriageData = DB::table('confirmation_of_marriages as mc')
                 ->leftJoin('branches as b', 'b.id', '=', 'mc.branch_id')
