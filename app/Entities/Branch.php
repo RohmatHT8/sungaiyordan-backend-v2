@@ -37,7 +37,7 @@ class Branch extends Model implements Transformable
     }
 
     public function getCanDeleteAttribute() {
-        return true;
+        return $this->defaultCanUpdateAttribute();
     }
 
     public function getCanPrintAttribute() {
