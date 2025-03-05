@@ -17,7 +17,7 @@ class CongregationalStatus extends Model implements Transformable
 {
     use TransformableTrait,TransactionLogModelTrait;
 
-    protected $fillable = ['status','date','note','user_id'];
+    protected $fillable = ['status','date','notes','user_id'];
     public $timestamps = false;
 
     public function user() {

@@ -26,10 +26,11 @@ class UserCreateRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'gender' => 'required|string|max:255',
             'email' => 'nullable|email|unique:users,email,NULL,id,deleted_at,NULL',
             'nik' => 'nullable|unique:users,nik',
             'password' => ['sometimes',new NotPresent],
-            'no_ktp' => 'nullable|unique:users,no_ktp,NULL,id,deleted_at,NULL',
+            'no_ktp' => 'required|unique:users,no_ktp,NULL,id,deleted_at,NULL',
             'date_of_birth' => 'required|date_format:Y-m-d|before:today',
             'place_of_birth' => 'required',
             'ktp_address' => 'nullable',

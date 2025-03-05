@@ -22,9 +22,8 @@ class UserCollection extends ResourceCollection
                     'name' => $model->name,
                     'phone_number' => $model->phone_number,
                     'branch' => !empty($model->mainBranch) ? $model->mainBranch->name:'',
-                    'can_edit' => $model->can_update,
+                    'can_update' => $model->can_update,
                     'can_delete' => $model->can_delete,
-                    'can_print' => $model->can_print
                 ];
             })
         ];

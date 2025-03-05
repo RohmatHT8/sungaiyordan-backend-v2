@@ -20,7 +20,7 @@ class BranchResource extends JsonResource
             'code' => $this->code,
             'address' => $this->address,
             'telephone'=> $this->telephone,
-            'user' => new UserSelect($this->whenLoaded('Shepherd')),
+            'user_id' => new UserSelect($this->whenLoaded('Shepherd')),
             'can_update' => $this->can_update,
             'can_print' => $this->can_print
         ];
