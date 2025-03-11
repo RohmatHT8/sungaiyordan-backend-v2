@@ -38,7 +38,6 @@ Route::group(['middleware' => ['capture-request']], function () {
 
     Route::get('select/branch', 'BranchesController@select')->middleware([
         'auth:api',
-        'can:user-index',
     ]);
 
     Route::get('select/permission', 'PermissionsController@select')->middleware([
