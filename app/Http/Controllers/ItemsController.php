@@ -117,7 +117,6 @@ class ItemsController extends Controller
     public function generatNo($payload)
     {
         // type.branch.lokasi.nourut.tahunpembelian
-        Log::info($payload);
         $typeCode = ItemType::where('id', $payload->item_type_id)->pluck('code')->first();
         $branchCode = 'GBISY';
         $roomCode = Room::where('id', $payload->room_id)->pluck('code')->first();
@@ -132,28 +131,26 @@ class ItemsController extends Controller
     public function getCounter($payload)
     {
         $year = DateTime::createFromFormat('Y-m-d', $payload->date_buying)->format('Y');
-        $no = Item::where('date_buying', 'LIKE', $year . '%')->pluck('no')->all();
+        $no = Item::whereYear('date_buying', $year)->pluck('no')->all();
         $maxValue = count($no) > 0 ? $this->getMaxValueFromStrings($no) : 0;
         $maxValue++;
         return str_pad($maxValue, 4, '0', STR_PAD_LEFT);
     }
 
-    public function getMaxValueFromStrings($strings, $delimiter = '.')
+    public function getMaxValueFromStrings($strings)
     {
-        $maxValue = null;
+        $maxValue = 0;
+    
         foreach ($strings as $string) {
-            $parts = explode($delimiter, $string);
-            $value = $parts[3];
-            if ($maxValue === null || $value > $maxValue) {
-                $maxValue = $value;
+            if (preg_match('/\.(\d{4})\.\d{4}$/', $string, $matches)) {
+                $value = (int) $matches[1];
+                if ($value > $maxValue) {
+                    $maxValue = $value;
+                }
             }
         }
-        if (preg_match('/\d+/', $maxValue, $matches)) {
-            $number = (int)$matches[0];
-            return $number;
-        } else {
-            return $maxValue;
-        }
+    
+        return $maxValue;
     }
     public function createDetails($request, $item)
     {
