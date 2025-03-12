@@ -20,6 +20,11 @@ class ItemRepositoryEloquent extends BaseRepository implements ItemRepository
      *
      * @return string
      */
+    protected $fieldSearchable = [
+        'no' => 'like',
+        'name' => 'like',
+        'merk' => 'like',
+    ];
     public function model()
     {
         return Item::class;
