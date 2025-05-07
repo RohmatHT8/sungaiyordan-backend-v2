@@ -24,7 +24,9 @@ class ConfirmationOfMarriageCollection extends ResourceCollection
                     'who_blessed' => $model->who_blessed,
                     'branch' => $model->branch_id ? $model->branch->name : $model->branch_non_local,
                     'date' => $model->date,
-                    'can_delete' => true
+                    'can_delete' => $model->can_delete,
+                    'can_update' => $model->can_update,
+                    'can_print' => $model->can_print,
                 ];
             })
         ];

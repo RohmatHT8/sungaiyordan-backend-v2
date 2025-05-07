@@ -20,11 +20,9 @@ class DepartmentCollection extends ResourceCollection
                     'id' => $model->id,
                     'name' => $model->name,
                     'code' => $model->code,
-                    'need_approval' => $model->need_approval,
-                    'approved_by' => $model->approved_by,
-                    'can_approve' => $model->can_approve,
                     'can_delete' => $model->can_delete,
-                    'can_print' => $model->can_print
+                    'can_print' => $model->can_print,
+                    'can_update' => $model->can_update
                 ];
             })
         ];

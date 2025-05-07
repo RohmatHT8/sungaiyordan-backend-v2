@@ -21,6 +21,20 @@ class Role extends Model implements Transformable
     protected $fillable = ['code','name','department_id','boss_id','need_approval'];
     protected $dates = ['deleted_at'];
 
+    protected $appends = ['can_update', 'can_delete', 'can_print'];
+
+    public function getCanUpdateAttribute () {
+        return $this->defaultCanUpdateAttribute();
+    }
+
+    public function getCanDeleteAttribute () {
+        return $this->defaultCanDeleteAttribute();
+    }
+
+    public function getCanPrintAttribute () {
+        return $this->defaultCanPrintAttribute();
+    }
+
     public function department(){
         return $this->belongsTo('App\Entities\Department');
     }

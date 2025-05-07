@@ -22,10 +22,8 @@ class RoleCollection extends ResourceCollection
                     'code' => $model->code,
                     'boss' => empty($model->boss_id)?null:$model->boss->name,
                     'department' => $model->department->name,
-                    'need_approval' => $model->need_approval,
-                    'approved_by' => $model->approved_by,
-                    'can_approve' => $model->can_approve,
                     'can_delete' => $model->can_delete,
+                    'can_update' => $model->can_update,
                     'can_print' => $model->can_print
                 ];
             })

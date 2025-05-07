@@ -140,7 +140,7 @@ class ItemsController extends Controller
     public function getMaxValueFromStrings($strings)
     {
         $maxValue = 0;
-    
+
         foreach ($strings as $string) {
             if (preg_match('/\.(\d{4})\.\d{4}$/', $string, $matches)) {
                 $value = (int) $matches[1];
@@ -149,7 +149,7 @@ class ItemsController extends Controller
                 }
             }
         }
-    
+
         return $maxValue;
     }
     public function createDetails($request, $item)
@@ -160,5 +160,18 @@ class ItemsController extends Controller
                 'item_id' => $item->id,
             ]);
         }
+    }
+    public function inventory(Request $request)
+    {
+        $type = explode('/', $request->url());
+        $type = $type[count($type) - 1];
+        $cloneRequest = json_decode($request->all()[0], true);
+        $query = DB::table('items')
+        ->join('item_types', 'item_types.id', '=', 'items.item_type_id')
+        ->join('rooms', 'rooms.id', '=', 'items.room_id')
+        ->join('item_branches', 'item_branches.item_id', '=', 'items.id')
+        ->whereIn('item_branches.branch_id', $cloneRequest['branch_ids']);
+
+        return Helper::buildSql($query, $request);
     }
 }

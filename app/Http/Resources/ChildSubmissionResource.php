@@ -15,14 +15,12 @@ class ChildSubmissionResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'branch' => new BranchSelect($this->whenLoaded('branch')),
+            'branch_id' => new BranchSelect($this->whenLoaded('branch')),
             'no' => $this->no,
             'date' => $this->date,
             'who_blessed' => $this->who_blessed,
             'who_signed' => $this->who_signed,
-            'user' => new UserSertificateSelect($this->whenLoaded('user')),
-            'can_delete' => true,
-            'can_print' => true
+            'user_id' => new UserSertificateSelect($this->whenLoaded('user')),
         ];
     }
 }

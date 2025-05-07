@@ -19,7 +19,7 @@ class Shdr extends Model implements Transformable
     use TransformableTrait, TransactionLogModelTrait, RelationshipsTrait, SoftDeletes;
 
     protected $fillable = ['user_id','date_shdr','date_until', 'place_of_shdr','who_signed', 'no'];
-    protected $append = ['can_delete', 'can_print'];
+    protected $append = ['can_update', 'can_delete', 'can_print'];
 
     public function user(){
         return $this->belongsTo('App\Entities\User','user_id');
@@ -33,8 +33,12 @@ class Shdr extends Model implements Transformable
         return $this->defaultCanPrintAttribute() && $this->no !== '000000';
     }
 
+    public function getCanUpdateAttribute() {
+        return $this->defaultCanUpdateAttribute() && $this->no !== '000000';
+    }
+
     public function getCanDeleteAttribute() {
-        return true;
+        return $this->defaultCanDeleteAttribute();
     }
 
 }

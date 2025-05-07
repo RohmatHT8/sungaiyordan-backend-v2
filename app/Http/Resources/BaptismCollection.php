@@ -23,7 +23,8 @@ class BaptismCollection extends ResourceCollection
                     'place_baptism' => !empty($model->branch->name) ? $model->branch->name : $model->place_of_baptism_outside,
                     'date' => $model->date,
                     'no' => $model->no,
-                    'can_delete' => true
+                    'can_delete' => $model->can_delete,
+                    'can_update' => $model->can_update,
                 ];
             })
         ];

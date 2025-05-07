@@ -107,7 +107,6 @@ class ChildSubmissionsController extends Controller
 
     public function generatePdf($id)
     {
-        Log::info('dapetnih');
         $data = ($this->show($id))->additional(['success' => true]);
         $cd = explode(',', Helper::convertIDDate($data['date']));
         $db = explode(',', Helper::convertIDDate($data['user']->date_of_birth));

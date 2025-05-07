@@ -19,7 +19,7 @@ class MarriageCertificate extends Model implements Transformable
 
     protected $fillable = ['no','date','branch_id','branch_non_local','groom','bride','who_blessed', 'who_signed', 'location'];
 
-    protected $appends = ['can_print'];
+    protected $appends = ['can_print', 'can_update', 'can_delete'];
     
     public function grooms(){
         return $this->belongsTo('App\Entities\User','groom');
@@ -34,6 +34,12 @@ class MarriageCertificate extends Model implements Transformable
     }
     public function getCanPrintAttribute() {
         return $this->defaultCanPrintAttribute() && $this->no !== '000000';
+    }
+    public function getCanUpdateAttribute() {
+        return $this->defaultCanUpdateAttribute();
+    }
+    public function getCanDeleteAttribute() {
+        return $this->defaultCanDeleteAttribute() && $this->no !== '000000';
     }
 
 

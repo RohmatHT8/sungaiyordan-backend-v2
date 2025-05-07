@@ -161,8 +161,10 @@ class ShdrsController extends Controller
         $TBS->MergeField('shepherd', $data['who_signed']);
         // Unduh file
         $outputFileName = 'SHDR_' . $data['no'] . '.docx';
+        header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         $TBS->Show(OPENTBS_DOWNLOAD, $outputFileName);
-        return response()->json(['message' => 'Print Success'], 200);
+        // return response()->json(['message' => 'Print Success'], 200);
+        exit;
     }
 
     public function test()

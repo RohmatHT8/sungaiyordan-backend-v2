@@ -15,14 +15,14 @@ class MarriageCertificateResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'branch' => new BranchSelect($this->whenLoaded('branch')),
+            'branch_id' => new BranchSelect($this->whenLoaded('branch')),
             'no' => $this->no,
             'branch_non_local' => $this->branch_non_local,
             'date' => $this->date,
             'who_blessed' => $this->who_blessed,
             'who_signed' => $this->who_signed,
-            'groom' => new UserSertificateSelect($this->whenLoaded('grooms')),
-            'bride' => new UserSertificateSelect($this->whenLoaded('brides')),
+            'groom_id' => new UserSertificateSelect($this->whenLoaded('grooms')),
+            'bride_id' => new UserSertificateSelect($this->whenLoaded('brides')),
             'location' => $this->location,
             'can_delete' => true,
             'can_print' => $this->can_print,

@@ -18,8 +18,8 @@ class RoleResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
-            'boss' => new RoleResource($this->whenLoaded('boss')),
-            'department' => new DepartmentResource($this->whenLoaded('department')),
+            'boss_id' => new RoleResource($this->whenLoaded('boss')),
+            'department_id' => new DepartmentResource($this->whenLoaded('department')),
             'need_approval' => $this->need_approval,
             'can_approve' => $this->can_approve,
             'can_update' => $this->can_update

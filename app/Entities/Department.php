@@ -19,9 +19,21 @@ class Department extends Model implements Transformable
     protected $fillable = ['code','name','need_approval'];
     protected $dates = ['deleted_at'];
 
-    protected $append = ['can_update', 'can_delete'];
+    protected $appends = ['can_update', 'can_delete', 'can_print'];
 
     public function roles(){
         return $this->hasMany('App\Entities\Role');
+    }
+
+    public function getCanUpdateAttribute () {
+        return $this->defaultCanUpdateAttribute();
+    }
+
+    public function getCanDeleteAttribute () {
+        return $this->defaultCanDeleteAttribute();
+    }
+
+    public function getCanPrintAttribute () {
+        return $this->defaultCanPrintAttribute();
     }
 }

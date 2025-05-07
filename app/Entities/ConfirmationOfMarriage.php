@@ -17,19 +17,35 @@ class ConfirmationOfMarriage extends Model implements Transformable
 {
     use TransformableTrait, SoftDeletes, TransactionLogModelTrait;
 
-    protected $fillable = ['no','date','branch_id','branch_non_local','groom','bride','who_blessed','who_signed', 'location'];
+    protected $fillable = ['no', 'date', 'branch_id', 'branch_non_local', 'groom', 'bride', 'who_blessed', 'who_signed', 'location'];
 
-    
-    public function grooms(){
-        return $this->belongsTo('App\Entities\User','groom');
-    }
-    
-    public function brides(){
-        return $this->belongsTo('App\Entities\User','bride');
-    }
-    
-    public function branch(){
-        return $this->belongsTo('App\Entities\Branch','branch_id');
+    protected $append = ['can_delete', 'can_update', 'can_print'];
+    public function grooms()
+    {
+        return $this->belongsTo('App\Entities\User', 'groom');
     }
 
+    public function brides()
+    {
+        return $this->belongsTo('App\Entities\User', 'bride');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo('App\Entities\Branch', 'branch_id');
+    }
+    public function getCanPrintAttribute()
+    {
+        return $this->defaultCanPrintAttribute();
+    }
+
+    public function getCanUpdateAttribute()
+    {
+        return $this->defaultCanUpdateAttribute();
+    }
+
+    public function getCanDeleteAttribute()
+    {
+        return $this->defaultCanDeleteAttribute();
+    }
 }

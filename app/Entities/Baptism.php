@@ -24,7 +24,7 @@ class Baptism extends Model implements Transformable
      */
     protected $fillable = ['no', 'date', 'place_of_baptism_inside', 'place_of_baptism_outside', 'user_id', 'who_baptism', 'who_signed'];
 
-    protected $append = ['can_delete', 'can_print'];
+    protected $append = ['can_update', 'can_delete', 'can_print'];
 
     public function user()
     {

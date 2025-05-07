@@ -265,7 +265,6 @@ class UsersController extends Controller
 
     public function jemaat(Request $request)
     {
-
         $type = explode('/', $request->url());
         $type = $type[count($type) - 1];
         $cloneRequest = json_decode($request->all()[0], true);

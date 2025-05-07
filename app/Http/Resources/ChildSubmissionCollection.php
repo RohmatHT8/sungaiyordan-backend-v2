@@ -15,7 +15,7 @@ class ChildSubmissionCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' =>  $this->collectResource($this->collection)->transform(function($model){
+            'data' =>  $this->collectResource($this->collection)->transform(function ($model) {
                 return [
                     'id' => $model->id,
                     'name' => $model->user->name,
@@ -23,7 +23,9 @@ class ChildSubmissionCollection extends ResourceCollection
                     'branch_name' => $model->branch->name,
                     'date' => $model->date,
                     'no' => $model->no,
-                    'can_delete' => true
+                    'can_delete' => $model->can_delete,
+                    'can_update' => $model->can_update,
+                    'can_print' => $model->can_print,
                 ];
             })
         ];

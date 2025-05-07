@@ -64,6 +64,8 @@ Route::group(['middleware' => ['capture-request']], function () {
 
     Route::get('report/jemaat', 'UsersController@jemaat');
 
+    Route::get('report/inventory', 'ItemsController@inventory');
+
     Route::get('user', 'UsersController@index')->middleware(['auth:api', 'can:user-index']);
     Route::get('user/{id}', 'UsersController@show')->middleware(['auth:api', 'can:user-read']);
     Route::post('user', 'UsersController@store')->middleware(['auth:api', 'can:user-create']);
