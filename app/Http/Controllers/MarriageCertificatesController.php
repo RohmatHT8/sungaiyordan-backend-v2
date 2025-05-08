@@ -163,8 +163,8 @@ class MarriageCertificatesController extends Controller
         $data = $this->show($id)->additional(['success' => true]);
         $date = explode(',', Helper::convertIDDate($data['date']));
         $data = json_decode(json_encode($data), true);
-        $groomDOB = explode(',', Helper::convertIDDate($data['groom']['date_of_birth']))[1];
-        $brideDOB = explode(',', Helper::convertIDDate($data['bride']['date_of_birth']))[1];
+        $groomDOB = explode(',', Helper::convertIDDate($data['groom_id']['date_of_birth']))[1];
+        $brideDOB = explode(',', Helper::convertIDDate($data['bride_id']['date_of_birth']))[1];
 
         include_once base_path('vendor/tinybutstrong/tinybutstrong/tbs_class.php');
         include_once base_path('vendor/tinybutstrong/opentbs/tbs_plugin_opentbs.php');
@@ -185,17 +185,17 @@ class MarriageCertificatesController extends Controller
         $TBS->MergeField('no', $data['no']);
         $TBS->MergeField('date', $date);
 
-        $TBS->MergeField('groomName', explode(" - ", $data['groom']['name'])[1]);
-        $TBS->MergeField('groomFather', $data['groom']['father']);
-        $TBS->MergeField('groomMother', $data['groom']['mother']);
+        $TBS->MergeField('groomName', explode(" - ", $data['groom_id']['name'])[1]);
+        $TBS->MergeField('groomFather', $data['groom_id']['father']);
+        $TBS->MergeField('groomMother', $data['groom_id']['mother']);
         $TBS->MergeField('groomDateOfBirth', $groomDOB);
-        $TBS->MergeField('groomPlaceOfBirth', $data['groom']['place_of_birth']);
+        $TBS->MergeField('groomPlaceOfBirth', $data['groom_id']['place_of_birth']);
 
-        $TBS->MergeField('brideName', explode(" - ", $data['bride']['name'])[1]);
-        $TBS->MergeField('brideFather', $data['bride']['father']);
-        $TBS->MergeField('brideMother', $data['bride']['mother']);
+        $TBS->MergeField('brideName', explode(" - ", $data['bride_id']['name'])[1]);
+        $TBS->MergeField('brideFather', $data['bride_id']['father']);
+        $TBS->MergeField('brideMother', $data['bride_id']['mother']);
         $TBS->MergeField('brideDateOfBirth', $brideDOB);
-        $TBS->MergeField('bridePlaceOfBirth', $data['bride']['place_of_birth']);
+        $TBS->MergeField('bridePlaceOfBirth', $data['bride_id']['place_of_birth']);
         
         $TBS->MergeField('whoBlessed', $data['who_blessed']);
         $TBS->MergeField('shepherd', $data['who_signed']);

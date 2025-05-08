@@ -112,17 +112,17 @@ class ConfirmationOfMarriagesController extends Controller
     {
         $data = ($this->show($id))->additional(['success' => true]);
         $cd = explode(',', Helper::convertIDDate($data['date']));
-        $groomName = User::where('id', $data['groom'])->pluck('name')[0];
-        $groomPOB = User::where('id', $data['groom'])->pluck('place_of_birth')[0];
-        $groomDOB = explode(',', Helper::convertIDDate(User::where('id', $data['groom'])->pluck('date_of_birth')[0]));
-        $groomFather = User::where('id', $data['groom'])->pluck('father')[0];
-        $groomMother = User::where('id', $data['groom'])->pluck('mother')[0];
+        $groomName = User::where('id', $data['groom_id'])->pluck('name')[0];
+        $groomPOB = User::where('id', $data['groom_id'])->pluck('place_of_birth')[0];
+        $groomDOB = explode(',', Helper::convertIDDate(User::where('id', $data['groom_id'])->pluck('date_of_birth')[0]));
+        $groomFather = User::where('id', $data['groom_id'])->pluck('father')[0];
+        $groomMother = User::where('id', $data['groom_id'])->pluck('mother')[0];
 
-        $brideName = User::where('id', $data['bride'])->pluck('name')[0];
-        $bridePOB = User::where('id', $data['bride'])->pluck('place_of_birth')[0];
-        $brideDOB = explode(',', Helper::convertIDDate(User::where('id', $data['bride'])->pluck('date_of_birth')[0]));
-        $brideFather = User::where('id', $data['bride'])->pluck('father')[0];
-        $brideMother = User::where('id', $data['bride'])->pluck('mother')[0];
+        $brideName = User::where('id', $data['bride_id'])->pluck('name')[0];
+        $bridePOB = User::where('id', $data['bride_id'])->pluck('place_of_birth')[0];
+        $brideDOB = explode(',', Helper::convertIDDate(User::where('id', $data['bride_id'])->pluck('date_of_birth')[0]));
+        $brideFather = User::where('id', $data['bride_id'])->pluck('father')[0];
+        $brideMother = User::where('id', $data['bride_id'])->pluck('mother')[0];
         
         $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
 
@@ -140,17 +140,17 @@ class ConfirmationOfMarriagesController extends Controller
     {
         $data = ($this->show(1))->additional(['success' => true]);
         $cd = explode(',', Helper::convertIDDate($data['date']));
-        $groomName = User::where('id', $data['groom'])->pluck('name')[0];
-        $groomPOB = User::where('id', $data['groom'])->pluck('place_of_birth')[0];
-        $groomDOB = explode(',', Helper::convertIDDate(User::where('id', $data['groom'])->pluck('date_of_birth')[0]));
-        $groomFather = User::where('id', $data['groom'])->pluck('father')[0];
-        $groomMother = User::where('id', $data['groom'])->pluck('mother')[0];
+        $groomName = User::where('id', $data['groom_id'])->pluck('name')[0];
+        $groomPOB = User::where('id', $data['groom_id'])->pluck('place_of_birth')[0];
+        $groomDOB = explode(',', Helper::convertIDDate(User::where('id', $data['groom_id'])->pluck('date_of_birth')[0]));
+        $groomFather = User::where('id', $data['groom_id'])->pluck('father')[0];
+        $groomMother = User::where('id', $data['groom_id'])->pluck('mother')[0];
 
-        $brideName = User::where('id', $data['bride'])->pluck('name')[0];
-        $bridePOB = User::where('id', $data['bride'])->pluck('place_of_birth')[0];
-        $brideDOB = explode(',', Helper::convertIDDate(User::where('id', $data['bride'])->pluck('date_of_birth')[0]));
-        $brideFather = User::where('id', $data['bride'])->pluck('father')[0];
-        $brideMother = User::where('id', $data['bride'])->pluck('mother')[0];
+        $brideName = User::where('id', $data['bride_id'])->pluck('name')[0];
+        $bridePOB = User::where('id', $data['bride_id'])->pluck('place_of_birth')[0];
+        $brideDOB = explode(',', Helper::convertIDDate(User::where('id', $data['bride_id'])->pluck('date_of_birth')[0]));
+        $brideFather = User::where('id', $data['bride_id'])->pluck('father')[0];
+        $brideMother = User::where('id', $data['bride_id'])->pluck('mother')[0];
         
         $shepherd = User::where('id', $data['branch']->shepherd_id)->pluck('name')[0];
 
@@ -164,8 +164,8 @@ class ConfirmationOfMarriagesController extends Controller
         $data = $this->show($id)->additional(['success' => true]);
         $date = explode(',', Helper::convertIDDate($data['date']));
         $data = json_decode(json_encode($data), true);
-        $groomDOB = explode(',', Helper::convertIDDate($data['groom']['date_of_birth']))[1];
-        $brideDOB = explode(',', Helper::convertIDDate($data['bride']['date_of_birth']))[1];
+        $groomDOB = explode(',', Helper::convertIDDate($data['groom_id']['date_of_birth']))[1];
+        $brideDOB = explode(',', Helper::convertIDDate($data['bride_id']['date_of_birth']))[1];
 
         include_once base_path('vendor/tinybutstrong/tinybutstrong/tbs_class.php');
         include_once base_path('vendor/tinybutstrong/opentbs/tbs_plugin_opentbs.php');
@@ -186,17 +186,17 @@ class ConfirmationOfMarriagesController extends Controller
         $TBS->MergeField('no', $data['no']);
         $TBS->MergeField('date', $date);
 
-        $TBS->MergeField('groomName', explode(" - ", $data['groom']['name'])[1]);
-        $TBS->MergeField('groomFather', $data['groom']['father']);
-        $TBS->MergeField('groomMother', $data['groom']['mother']);
+        $TBS->MergeField('groomName', explode(" - ", $data['groom_id']['name'])[1]);
+        $TBS->MergeField('groomFather', $data['groom_id']['father']);
+        $TBS->MergeField('groomMother', $data['groom_id']['mother']);
         $TBS->MergeField('groomDateOfBirth', $groomDOB);
-        $TBS->MergeField('groomPlaceOfBirth', $data['groom']['place_of_birth']);
+        $TBS->MergeField('groomPlaceOfBirth', $data['groom_id']['place_of_birth']);
 
-        $TBS->MergeField('brideName', explode(" - ", $data['bride']['name'])[1]);
-        $TBS->MergeField('brideFather', $data['bride']['father']);
-        $TBS->MergeField('brideMother', $data['bride']['mother']);
+        $TBS->MergeField('brideName', explode(" - ", $data['bride_id']['name'])[1]);
+        $TBS->MergeField('brideFather', $data['bride_id']['father']);
+        $TBS->MergeField('brideMother', $data['bride_id']['mother']);
         $TBS->MergeField('brideDateOfBirth', $brideDOB);
-        $TBS->MergeField('bridePlaceOfBirth', $data['bride']['place_of_birth']);
+        $TBS->MergeField('bridePlaceOfBirth', $data['bride_id']['place_of_birth']);
         
         $TBS->MergeField('whoBlessed', $data['who_blessed']);
         $TBS->MergeField('shepherd', $data['who_signed']);
