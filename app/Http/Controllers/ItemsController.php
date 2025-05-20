@@ -15,6 +15,7 @@ use App\Http\Requests\ItemCreateRequest;
 use App\Http\Requests\ItemUpdateRequest;
 use App\Http\Resources\ItemCollection;
 use App\Http\Resources\ItemResource;
+use App\Http\Resources\ItemSelect;
 use App\Repositories\ItemBranchRepository;
 use App\Repositories\ItemRepository;
 use App\Util\Helper;
@@ -49,15 +50,27 @@ class ItemsController extends Controller
         return new ItemCollection($this->repository->paginate($request->per_page));
     }
 
+
+    public function select(Request $request)
+    {
+        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        return ItemSelect::collection($this->repository->paginate($request->per_page));
+    }
+
     public function store(ItemCreateRequest $request)
     {
         try {
             DB::beginTransaction();
-            if (empty($request->no)) {
-                $request->merge(['no' => $this->generatNo($request)]);
+            for ($i = 0; $i < $request->amount; $i++) {
+                if ($i >= 1) {
+                    $request->merge(['no' => '']);
+                }
+                if (empty($request->no)) {
+                    $request->merge(['no' => $this->generatNo($request)]);
+                }
+                $item = $this->logStore($request, $this->repository);
+                $this->createDetails($request, $item);
             }
-            $item = $this->logStore($request, $this->repository);
-            $this->createDetails($request, $item);
             DB::commit();
             return ($this->show($item->id))->additional(['success' => true]);
         } catch (ValidatorException $e) {
@@ -166,11 +179,15 @@ class ItemsController extends Controller
         $type = explode('/', $request->url());
         $type = $type[count($type) - 1];
         $cloneRequest = json_decode($request->all()[0], true);
+        log::info($cloneRequest);
+
         $query = DB::table('items')
-        ->join('item_types', 'item_types.id', '=', 'items.item_type_id')
-        ->join('rooms', 'rooms.id', '=', 'items.room_id')
-        ->join('item_branches', 'item_branches.item_id', '=', 'items.id')
-        ->whereIn('item_branches.branch_id', $cloneRequest['branch_ids']);
+            ->join('item_types', 'item_types.id', '=', 'items.item_type_id')
+            ->join('rooms', 'rooms.id', '=', 'items.room_id')
+            ->join('item_branches', 'item_branches.item_id', '=', 'items.id')
+            ->whereIn('item_branches.branch_id', $cloneRequest['branch_ids'])
+            ->whereIn('rooms.id', $cloneRequest['room_ids'])
+            ->distinct();
 
         return Helper::buildSql($query, $request);
     }

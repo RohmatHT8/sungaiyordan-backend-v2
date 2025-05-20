@@ -61,6 +61,7 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::get('select/building', 'BuildingsController@select')->middleware(['auth:api']);
     Route::get('select/itemtype', 'ItemTypesController@select')->middleware(['auth:api']);
     Route::get('select/room', 'RoomsController@select')->middleware(['auth:api']);
+    Route::get('select/item', 'ItemsController@select')->middleware(['auth:api']);
 
     Route::get('report/jemaat', 'UsersController@jemaat');
 
@@ -194,6 +195,12 @@ Route::group(['middleware' => ['capture-request']], function () {
     route::post('item', 'ItemsController@store')->middleware(['auth:api', 'can:item-create']);
     route::put('item/{id}', 'ItemsController@update')->middleware(['auth:api', 'can:item-update']);
     route::delete('item/{id}', 'ItemsController@destroy')->middleware(['auth:api', 'can:item-delete']);
+
+    Route::get('itemstatus', 'ItemStatusesController@index')->middleware(['auth:api', 'can:itemstatus-index']);
+    Route::get('itemstatus/{id}', 'ItemStatusesController@show')->middleware(['auth:api', 'can:itemstatus-read']);
+    Route::post('itemstatus', 'ItemStatusesController@store')->middleware(['auth:api', 'can:itemstatus-create']);
+    Route::put('itemstatus/{id}', 'ItemStatusesController@update')->middleware(['auth:api', 'can:itemstatus-update']);
+    Route::delete('itemstatus/{id}', 'ItemStatusesController@destroy')->middleware(['auth:api', 'can:itemstatus-delete']);
 });
 
 Route::get('select/branchWeb', 'BranchesController@select');
