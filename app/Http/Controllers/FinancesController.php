@@ -14,6 +14,7 @@ use App\Http\Requests\FinanceUpdateRequest;
 use App\Http\Resources\FinanceCollection;
 use App\Http\Resources\FinanceResource;
 use App\Repositories\FinanceRepository;
+use App\Util\Helper;
 use App\Util\TransactionLogControllerTrait;
 use App\Validators\FinanceValidator;
 use Illuminate\Support\Facades\DB;
@@ -116,5 +117,15 @@ class FinancesController extends Controller
                 'message' => $e->getMessageBag()
             ]);
         }
+    }
+    public function report(Request $request)
+    {
+        $type = explode('/', $request->url());
+        $type = $type[count($type) - 1];
+        $cloneRequest = json_decode($request->all()[0], true);
+        $query = DB::table('finances')
+            ->join('roles', 'roles.id', '=', 'finances.role_id');
+
+        return Helper::buildSql($query, $request);
     }
 }

@@ -64,6 +64,7 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::get('select/item', 'ItemsController@select')->middleware(['auth:api']);
 
     Route::get('report/jemaat', 'UsersController@jemaat');
+    Route::get('report/finance', 'FinancesController@report');
 
     Route::get('report/inventory', 'ItemsController@inventory');
 

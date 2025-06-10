@@ -16,6 +16,7 @@ use App\Http\Resources\RoleSelect;
 use App\Repositories\RoleRepository;
 use App\Util\TransactionLogControllerTrait;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class RolesController.
@@ -48,7 +49,9 @@ class RolesController extends Controller
     public function select(Request $request)
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        Log::info($request->from);
         if ($request->from === 'finance') {
+            Log::info('masuk');
             $this->repository->pushCriteria(new PerDivisiRoleCriteria);
         }
         return RoleSelect::collection($this->repository->paginate($request->per_page));

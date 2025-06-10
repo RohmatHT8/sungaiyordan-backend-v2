@@ -22,6 +22,10 @@ class ReportsTableSeeder extends Seeder
                 'name' => 'Inventory',
                 'function' => 'inventory'
             ],
+            [
+                'name' => 'Finance',
+                'function' => 'finance'
+            ],
         ];
 
         foreach ($reports as $key => $value) {

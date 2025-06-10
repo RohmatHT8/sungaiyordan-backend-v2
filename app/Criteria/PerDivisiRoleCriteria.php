@@ -2,6 +2,7 @@
 
 namespace App\Criteria;
 
+use Illuminate\Support\Facades\Log;
 use Prettus\Repository\Contracts\CriteriaInterface;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
@@ -22,6 +23,6 @@ class PerDivisiRoleCriteria implements CriteriaInterface
      */
     public function apply($model, RepositoryInterface $repository)
     {
-        return $model;
+        return $model->where('department_id', '4');
     }
 }
