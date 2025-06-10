@@ -23,13 +23,6 @@ use App\Util\TransactionLogControllerTrait;
 use App\Validators\ItemValidator;
 use DateTime;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-
-/**
- * Class ItemsController.
- *
- * @package namespace App\Http\Controllers;
- */
 class ItemsController extends Controller
 {
     use TransactionLogControllerTrait;
@@ -179,7 +172,6 @@ class ItemsController extends Controller
         $type = explode('/', $request->url());
         $type = $type[count($type) - 1];
         $cloneRequest = json_decode($request->all()[0], true);
-        log::info($cloneRequest);
 
         $query = DB::table('items')
             ->join('item_types', 'item_types.id', '=', 'items.item_type_id')

@@ -1,0 +1,2 @@
+coment php artisan make:entity ExamplePost => untuk membuat model controller dan migrations serat mendaftarkan request ke appServiceProvider
+comment php artisan make:criteria ExamplePost => untuk membuat Criteria

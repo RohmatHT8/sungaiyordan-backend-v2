@@ -70,6 +70,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\ItemRepository::class, \App\Repositories\ItemRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\ItemBranchRepository::class, \App\Repositories\ItemBranchRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\ItemStatusRepository::class, \App\Repositories\ItemStatusRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\FinanceRepository::class, \App\Repositories\FinanceRepositoryEloquent::class);
         //:end-bindings:
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Criteria\PerDivisiRoleCriteria;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -47,6 +48,9 @@ class RolesController extends Controller
     public function select(Request $request)
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        if ($request->from === 'finance') {
+            $this->repository->pushCriteria(new PerDivisiRoleCriteria);
+        }
         return RoleSelect::collection($this->repository->paginate($request->per_page));
     }
 

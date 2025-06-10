@@ -86,6 +86,9 @@ class TransactionsTableSeeder extends Seeder
             ],[
                 'name' => 'ItemStatus',
                 'subject' => 'App\Entities\ItemStatus'
+            ],[
+                'name' => 'Finance',
+                'subject' => 'App\Entities\Finance'
             ],
         ];
 

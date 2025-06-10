@@ -201,6 +201,14 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::post('itemstatus', 'ItemStatusesController@store')->middleware(['auth:api', 'can:itemstatus-create']);
     Route::put('itemstatus/{id}', 'ItemStatusesController@update')->middleware(['auth:api', 'can:itemstatus-update']);
     Route::delete('itemstatus/{id}', 'ItemStatusesController@destroy')->middleware(['auth:api', 'can:itemstatus-delete']);
+
+    Route::get('finance', 'FinancesController@index')->middleware(['auth:api', 'can:finance-index']);
+    Route::get('finance/{id}', 'FinancesController@show')->middleware(['auth:api', 'can:finance-read']);
+    Route::get('finance/add/lastBalance', 'FinancesController@lastBalance')->middleware(['auth:api', 'can:finance-read']);
+    Route::post('finance', 'FinancesController@store')->middleware(['auth:api', 'can:finance-create']);
+    Route::put('finance/{id}', 'FinancesController@update')->middleware(['auth:api', 'can:finance-update']);
+    Route::delete('finance/{id}', 'FinancesController@destroy')->middleware(['auth:api', 'can:finance-delete']);
+    Route::delete('finance','FinancesController@destroyAll')->middleware(['auth:api', 'can:finance-delete']);
 });
 
 Route::get('select/branchWeb', 'BranchesController@select');
