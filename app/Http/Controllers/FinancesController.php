@@ -124,7 +124,7 @@ class FinancesController extends Controller
         $type = $type[count($type) - 1];
         $cloneRequest = json_decode($request->all()[0], true);
         $query = DB::table('finances')
-            ->join('roles', 'roles.id', '=', 'finances.role_id');
+            ->leftJoin('roles', 'roles.id', '=', 'finances.role_id');
 
         return Helper::buildSql($query, $request);
     }
