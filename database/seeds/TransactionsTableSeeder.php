@@ -89,6 +89,9 @@ class TransactionsTableSeeder extends Seeder
             ],[
                 'name' => 'Finance',
                 'subject' => 'App\Entities\Finance'
+            ],[
+                'name' => 'BookingRoom',
+                'subject' => 'App\Entities\BookingRoom'
             ],
         ];
 

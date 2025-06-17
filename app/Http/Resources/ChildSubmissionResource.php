@@ -20,6 +20,7 @@ class ChildSubmissionResource extends JsonResource
             'date' => $this->date,
             'who_blessed' => $this->who_blessed,
             'who_signed' => $this->who_signed,
+            'can_print' => $this->can_print,
             'user_id' => new UserSertificateSelect($this->whenLoaded('user')),
         ];
     }

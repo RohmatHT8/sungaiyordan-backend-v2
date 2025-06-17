@@ -210,6 +210,13 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::put('finance/{id}', 'FinancesController@update')->middleware(['auth:api', 'can:finance-update']);
     Route::delete('finance/{id}', 'FinancesController@destroy')->middleware(['auth:api', 'can:finance-delete']);
     Route::delete('finance','FinancesController@destroyAll')->middleware(['auth:api', 'can:finance-delete']);
+
+    Route::get('bookingroom', 'BookingRoomsController@index')->middleware(['auth:api', 'can:bookingroom-index']);
+    Route::get('bookingroom/{id}', 'BookingRoomsController@show')->middleware(['auth:api', 'can:bookingroom-read']);
+    Route::post('bookingroom', 'BookingRoomsController@store')->middleware(['auth:api', 'can:bookingroom-create']);
+    Route::put('bookingroom/{id}', 'BookingRoomsController@update')->middleware(['auth:api', 'can:bookingroom-update']);
+    Route::delete('bookingroom/{id}', 'BookingRoomsController@destroy')->middleware(['auth:api', 'can:bookingroom-delete']);
+    Route::delete('bookingroom','BookingRoomsController@destroyAll')->middleware(['auth:api', 'can:bookingroom-delete']);
 });
 
 Route::get('select/branchWeb', 'BranchesController@select');

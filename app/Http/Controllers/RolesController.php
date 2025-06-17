@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Criteria\PerDivisiRoleCriteria;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\RoleCreateRequest;
 use App\Http\Requests\RoleUpdateRequest;
@@ -16,13 +13,6 @@ use App\Http\Resources\RoleSelect;
 use App\Repositories\RoleRepository;
 use App\Util\TransactionLogControllerTrait;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-
-/**
- * Class RolesController.
- *
- * @package namespace App\Http\Controllers;
- */
 class RolesController extends Controller
 {
     use TransactionLogControllerTrait;
@@ -34,11 +24,6 @@ class RolesController extends Controller
         $this->repository = $repository;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $this->repository->pushCriteria(app('App\Criteria\OrderCriteria'));
@@ -49,9 +34,7 @@ class RolesController extends Controller
     public function select(Request $request)
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        Log::info($request->from);
         if ($request->from === 'finance') {
-            Log::info('masuk');
             $this->repository->pushCriteria(new PerDivisiRoleCriteria);
         }
         return RoleSelect::collection($this->repository->paginate($request->per_page));
