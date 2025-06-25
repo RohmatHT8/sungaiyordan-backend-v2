@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class BookingRoomCollection extends ResourceCollection
+class BudgetCollection extends ResourceCollection
 {
     public function toArray($request)
     {
@@ -12,11 +12,12 @@ class BookingRoomCollection extends ResourceCollection
             'data' =>  $this->collectResource($this->collection)->transform(function($model){
                 return [
                     'id' => $model->id,
-                    'used_for' => $model->used_for,
-                    'user' => !empty($model->userOwn->name) ? $model->userOwn->name : $model->user,
-                    'whereof' => !empty($model->branch->name) ? $model->branch->name : $model->whereof,
+                    'note' => $model->note,
+                    'amount' => $model->amount,
                     'date' => $model->date,
-                    'date_until' => $model->date_until,
+                    'role_name' => $model->role->name,
+                    'branch_name' => $model->branch->name,
+                    'is_closed' => !$model->is_closed ? 'Open' : 'Closed',
                     'can_delete' => $model->can_delete,
                     'can_update' => $model->can_update,
                 ];

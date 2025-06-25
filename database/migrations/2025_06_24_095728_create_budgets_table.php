@@ -13,17 +13,16 @@ return new class extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('booking_rooms', function (Blueprint $table) {
+		Schema::create('budgets', function (Blueprint $table) {
 			$table->increments('id');
-			$table->unsignedBigInteger('user_id')->unsigned()->nullable();
-			$table->foreign('user_id')->references('id')->on('users');
+			$table->string('note');
+			$table->string('amount');
+			$table->date('date');
+			$table->unsignedBigInteger('role_id')->unsigned()->nullable();
+			$table->foreign('role_id')->references('id')->on('roles');
 			$table->unsignedBigInteger('branch_id')->unsigned()->nullable();
 			$table->foreign('branch_id')->references('id')->on('branches');
-			$table->string('user')->nullable();
-			$table->string('whereof')->nullable();
-			$table->timestamp('date');
-			$table->timestamp('date_until');
-			$table->string('used_for');
+			$table->boolean('is_closed')->default(false);
 			$table->timestamps();
 		});
 	}
@@ -35,6 +34,6 @@ return new class extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('booking_rooms');
+		Schema::drop('budgets');
 	}
 };

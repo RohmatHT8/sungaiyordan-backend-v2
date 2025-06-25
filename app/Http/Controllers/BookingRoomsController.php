@@ -12,6 +12,7 @@ use App\Http\Requests\BookingRoomUpdateRequest;
 use App\Http\Resources\BookingRoomCollection;
 use App\Http\Resources\BookingRoomResource;
 use App\Repositories\BookingRoomRepository;
+use App\Util\TransactionLogControllerTrait;
 use App\Validators\BookingRoomValidator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -23,6 +24,7 @@ use Illuminate\Support\Facades\Log;
  */
 class BookingRoomsController extends Controller
 {
+    use TransactionLogControllerTrait;
     protected $repository;
     public function __construct(BookingRoomRepository $repository)
     {
@@ -39,11 +41,9 @@ class BookingRoomsController extends Controller
     {
         try {
             DB::beginTransaction();
-            Log::info($request);
-            // $bookingRoom = $this->logStore($request,$this->repository);
+            $bookingRoom = $this->logStore($request,$this->repository);
             DB::commit();
-
-            // return ($this->show($bookingRoom->id))->additional(['success' => true]);
+            return ($this->show($bookingRoom->id))->additional(['success' => true]);
         } catch (ValidatorException $e) {
             DB::rollback();
             return response()->json([
@@ -54,7 +54,7 @@ class BookingRoomsController extends Controller
     }
 
     public function show($id) {
-        $role = $this->repository->with(['user'])->scopeQuery(function($query){
+        $role = $this->repository->with(['userOwn', 'branch'])->scopeQuery(function($query){
             return $query;
         })->find($id);
 
@@ -64,9 +64,34 @@ class BookingRoomsController extends Controller
     public function update(BookingRoomUpdateRequest $request, $id)
     {
         try {
+            DB::beginTransaction();
+            $bookingRoom = $this->repository->update($request->only($this->repository->getFillable()), $id);
+            DB::commit();
+            return ($this->show($bookingRoom->id))->additional(['success' => true]);
         } catch (ValidatorException $e) {
+            DB::rollBack();
+            return response()->json([
+                'success'   => false,
+                'message' => $e->getMessageBag()
+            ]);
         }
     }
 
-    public function destroy($id) {}
+    public function destroy($id) {
+        try {
+            DB::beginTransaction();
+            $bookingRoom = $this->repository->delete($id);
+            DB::commit();
+
+            return response()->json([
+                'success' => $bookingRoom
+            ]);
+        } catch (ValidatorException $e) {
+            DB::rollback();
+            return response()->json([
+                'success'   => false,
+                'message' => $e->getMessageBag()
+            ]);
+        }
+    }
 }

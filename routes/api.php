@@ -217,6 +217,14 @@ Route::group(['middleware' => ['capture-request']], function () {
     Route::put('bookingroom/{id}', 'BookingRoomsController@update')->middleware(['auth:api', 'can:bookingroom-update']);
     Route::delete('bookingroom/{id}', 'BookingRoomsController@destroy')->middleware(['auth:api', 'can:bookingroom-delete']);
     Route::delete('bookingroom','BookingRoomsController@destroyAll')->middleware(['auth:api', 'can:bookingroom-delete']);
+
+    Route::get('budget', 'BudgetsController@index')->middleware(['auth:api', 'can:budget-index']);
+    Route::get('budget/{id}', 'BudgetsController@show')->middleware(['auth:api', 'can:budget-read']);
+    Route::post('budget', 'BudgetsController@store')->middleware(['auth:api', 'can:budget-create']);
+    Route::get('budget/closed/{id}', 'BudgetsController@close')->middleware(['auth:api', 'can:budget-update']);
+    Route::put('budget/{id}', 'BudgetsController@update')->middleware(['auth:api', 'can:budget-update']);
+    Route::delete('budget/{id}', 'BudgetsController@destroy')->middleware(['auth:api', 'can:budget-delete']);
+    Route::delete('budget','BudgetsController@destroyAll')->middleware(['auth:api', 'can:budget-delete']);
 });
 
 Route::get('select/branchWeb', 'BranchesController@select');
