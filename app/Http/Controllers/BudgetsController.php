@@ -80,7 +80,7 @@ class BudgetsController extends Controller
         try {
             DB::beginTransaction();
             $data = [
-                'balance' => (new Finance())->last_balance + $request->get('amount'),
+                'balance' => (new Finance())->last_balance - $request->get('amount'),
                 'note' => $request->get('note'),
                 'date' => $request->get('date'),
                 'amount' => $request->get('amount'),
@@ -91,7 +91,7 @@ class BudgetsController extends Controller
 
             $this->repository->update(["is_closed" => true], $id);
             $this->financeRepository->create($data);
-            
+
             DB::commit();
 
             return response()->json([
